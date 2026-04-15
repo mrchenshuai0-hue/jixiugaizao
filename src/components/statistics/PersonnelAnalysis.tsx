@@ -70,7 +70,7 @@ export default function PersonnelAnalysis() {
 
   const chart = (
     <div className="grid grid-cols-2 gap-6">
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">从业人员占比</h3>
         <ResponsiveContainer width="100%" height={256}>
           <PieChart>
@@ -84,7 +84,7 @@ export default function PersonnelAnalysis() {
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">送车频次分布</h3>
         <ResponsiveContainer width="100%" height={256}>
           <BarChart data={freqData}>
@@ -96,7 +96,7 @@ export default function PersonnelAnalysis() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md col-span-2">
+      <div className="p-4 border border-gray-200 rounded-md col-span-2 min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">异常送车时间段分析</h3>
         <ResponsiveContainer width="100%" height={256}>
           <LineChart data={timeData}>

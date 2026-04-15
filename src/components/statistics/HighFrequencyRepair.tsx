@@ -65,7 +65,7 @@ export default function HighFrequencyRepair() {
 
   const chart = (
     <div className="grid grid-cols-2 gap-6">
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">行政区划维修占比</h3>
         <ResponsiveContainer width="100%" height={256}>
           <PieChart>
@@ -79,7 +79,7 @@ export default function HighFrequencyRepair() {
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">维修类型分布</h3>
         <ResponsiveContainer width="100%" height={256}>
           <BarChart data={typeData}>
@@ -91,7 +91,7 @@ export default function HighFrequencyRepair() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md col-span-2">
+      <div className="p-4 border border-gray-200 rounded-md col-span-2 min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">维修次数趋势图</h3>
         <ResponsiveContainer width="100%" height={256}>
           <LineChart data={trendData}>

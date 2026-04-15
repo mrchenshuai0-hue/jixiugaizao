@@ -11,9 +11,9 @@ const data = [
 
 export default function VehicleTrajectoryStatistics() {
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm">
+    <div className="p-6 bg-white rounded-lg shadow-sm min-w-0">
       <h2 className="text-lg font-semibold text-gray-800 mb-4">车辆维修轨迹分析</h2>
-      <div className="h-80">
+      <div className="h-80 min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart>
             <CartesianGrid />

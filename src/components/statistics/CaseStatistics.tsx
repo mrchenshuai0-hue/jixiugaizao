@@ -60,9 +60,9 @@ export default function CaseStatistics() {
 
   const chart = (
     <div className="grid grid-cols-2 gap-6">
-      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200 min-w-0">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">重点地区分析</h2>
-        <div className="h-64">
+        <div className="h-64 min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -74,9 +74,9 @@ export default function CaseStatistics() {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200 min-w-0">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">重点企业分析</h2>
-        <div className="h-64">
+        <div className="h-64 min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -88,9 +88,9 @@ export default function CaseStatistics() {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200 min-w-0">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">重点案件分析</h2>
-        <div className="h-64">
+        <div className="h-64 min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={data} innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">
@@ -103,9 +103,9 @@ export default function CaseStatistics() {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200 min-w-0">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">重点人员分析</h2>
-        <div className="h-64">
+        <div className="h-64 min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={data} innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">

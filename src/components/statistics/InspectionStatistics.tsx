@@ -67,7 +67,7 @@ export default function InspectionStatistics() {
 
   const chart = (
     <div className="grid grid-cols-2 gap-6">
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">季度检查统计</h3>
         <ResponsiveContainer width="100%" height={256}>
           <BarChart data={data}>
@@ -80,7 +80,7 @@ export default function InspectionStatistics() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">检查类型占比</h3>
         <ResponsiveContainer width="100%" height={256}>
           <PieChart>

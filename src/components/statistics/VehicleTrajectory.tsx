@@ -39,8 +39,8 @@ export default function VehicleTrajectory() {
       <div className="flex-1 rounded-lg border border-gray-200 overflow-hidden relative bg-[#f0f3f6] z-0">
         <MapContainer center={[39.9079, 116.3835]} zoom={13} style={{ height: '100%', width: '100%' }}>
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           />
           <Polyline positions={path} pathOptions={{ color: '#419EFF', weight: 5, opacity: 0.8 }} />
           {path.map((pos, index) => (

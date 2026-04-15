@@ -12,13 +12,13 @@ export default function StatisticsDashboard() {
     <div className="p-6 h-full overflow-auto bg-[#F5F5F5]">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">统计分析概览</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <RepairStatistics />
-        <PersonnelStatistics />
-        <VehicleTrajectoryStatistics />
-        <InspectionStatistics />
-        <SupervisionStatistics />
-        <CaseStatistics />
-        <KeyAnalysisStatistics />
+        <div className="min-w-0"><RepairStatistics /></div>
+        <div className="min-w-0"><PersonnelStatistics /></div>
+        <div className="min-w-0"><VehicleTrajectoryStatistics /></div>
+        <div className="min-w-0"><InspectionStatistics /></div>
+        <div className="min-w-0"><SupervisionStatistics /></div>
+        <div className="min-w-0"><CaseStatistics /></div>
+        <div className="min-w-0"><KeyAnalysisStatistics /></div>
       </div>
     </div>
   );
