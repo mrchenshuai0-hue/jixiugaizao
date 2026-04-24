@@ -121,7 +121,7 @@ export default function ViolationDetail({ id, onBack }: ViolationDetailProps) {
               </div>
               <div className="col-span-2">
                 <span className="text-sm text-[#999999] block mb-1">情况描述</span>
-                <div className="text-sm text-[#666666] leading-relaxed bg-gray-50 p-4 rounded border border-gray-100 italic">
+                <div className="text-sm text-[#666666] leading-relaxed bg-gray-50 p-4 rounded border border-gray-100">
                   {data.description}
                 </div>
               </div>

@@ -18,7 +18,18 @@ export default function InspectionList({ onAdd, onView }: InspectionListProps) {
       setLoading(true);
       try {
         const result = await api.inspection.getAll();
-        setData(result);
+        // 补充/丰富 mock 数据
+        const enhancedData = result.map((item, index) => ({
+          ...item,
+          inspectMethod: index % 2 === 0 ? '日常检查' : '专项检查',
+          unitLevel: index % 3 === 0 ? '派出所' : '分局',
+          enterpriseStatus: '正常营业',
+          isNormal: item.situation === '正常' ? '是' : '否',
+          unitCode: `UC${2024000 + index}`,
+          region: index % 2 === 0 ? '福州市鼓楼区' : '福州市台江区',
+          inspectionUnit: index % 3 === 0 ? '五凤派出所' : '鼓楼分局治安大队'
+        }));
+        setData(enhancedData);
       } catch (error) {
         console.error('Failed to fetch inspections:', error);
       } finally {
@@ -34,32 +45,71 @@ export default function InspectionList({ onAdd, onView }: InspectionListProps) {
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100">
-            <div className="flex flex-wrap gap-4 items-end">
-              <div className="w-64">
-                <label className="block text-sm text-[#666666] mb-1.5">公司名称</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入公司名称" />
-              </div>
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">行政区划</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入行政区划" />
-              </div>
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">检查人员</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入检查人员" />
-              </div>
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">检查情况</label>
-                <select className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-end">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">行政区划</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
                   <option value="">全部</option>
-                  <option value="正常">正常</option>
-                  <option value="发现问题">发现问题</option>
+                  <option value="fz">福州市</option>
+                  <option value="xm">厦门市</option>
                 </select>
               </div>
-              <div className="flex space-x-2 ml-auto">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">公司名称</label>
+                <input type="text" className="w-full h-8 px-3 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入公司名称" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">检查方式</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="日常">日常检查</option>
+                  <option value="专项">专项检查</option>
+                  <option value="双随机">双随机检查</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">检查人员姓名</label>
+                <input type="text" className="w-full h-8 px-3 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入姓名" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">检查日期</label>
+                <input type="date" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">企业编码</label>
+                <input type="text" className="w-full h-8 px-3 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入企业编码" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">是否正常</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="是">是</option>
+                  <option value="否">否</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">检查单位级别</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="省级">省级</option>
+                  <option value="市级">市级</option>
+                  <option value="县级">县级</option>
+                  <option value="派出所">派出所</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">企业状态</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+                  <option value="">全部</option>
+                  <option value="1">正常营业</option>
+                  <option value="0">歇业</option>
+                </select>
+              </div>
+              <div className="flex space-x-2 justify-end">
+                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
                   <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
+                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-xs font-medium">
                   <RotateCcw size={14} className="mr-1.5" /> 重置
                 </button>
               </div>
@@ -138,16 +188,16 @@ export default function InspectionList({ onAdd, onView }: InspectionListProps) {
                         </button>
                         <div className="relative">
                           <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                             onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
                           >
-                            更多 <ChevronDown size={14} className="ml-0.5" />
+                            <ChevronDown size={14} />
                           </button>
                           {openDropdown === row.id && (
                             <>
                               <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
                               <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
-                                <button className="w-full text-left px-4 py-2 text-sm text-[#333333] hover:bg-blue-50 hover:text-[#419EFF]">
+                                <button className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                   删除
                                 </button>
                               </div>

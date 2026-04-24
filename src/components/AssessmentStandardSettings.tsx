@@ -11,6 +11,7 @@ export default function AssessmentStandardSettings() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [itemModalType, setItemModalType] = useState<'category' | 'subitem' | 'point'>('category');
   const [isAddVetoModalOpen, setIsAddVetoModalOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const toggleNode = (id: string) => {
     setExpandedNodes(prev => ({ ...prev, [id]: !prev[id] }));

@@ -4,9 +4,11 @@ import PersonnelDetail from './PersonnelDetail';
 import PersonnelForm from './PersonnelForm';
 import PersonnelPunishmentManagement from './PersonnelPunishmentManagement';
 import PersonnelBlacklistManagement from './PersonnelBlacklistManagement';
+import KeyPersonnelSearch from './KeyPersonnelSearch';
+import WarningInformationCenter from './WarningInformationCenter';
 
 type ViewState = 'list' | 'detail' | 'form';
-type TabType = 'info' | 'punishment' | 'blacklist';
+type TabType = 'info' | 'punishment' | 'blacklist' | 'key_personnel' | 'warning';
 
 export default function PersonnelManagement() {
   const [activeTab, setActiveTab] = useState<TabType>('info');
@@ -34,11 +36,8 @@ export default function PersonnelManagement() {
   };
 
   const handleSave = () => {
-    if (selectedId) {
-      setView('detail');
-    } else {
-      setView('list');
-    }
+    setView('list');
+    setSelectedId(null);
   };
 
   return (
@@ -71,6 +70,22 @@ export default function PersonnelManagement() {
               >
                 从业人员黑名单
               </button>
+              <button
+                onClick={() => setActiveTab('key_personnel')}
+                className={`h-10 px-1 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'key_personnel' ? 'border-[#419EFF] text-[#419EFF]' : 'border-transparent text-[#666666] hover:text-[#333333]'
+                }`}
+              >
+                重点人员查询
+              </button>
+              <button
+                onClick={() => setActiveTab('warning')}
+                className={`h-10 px-1 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'warning' ? 'border-[#419EFF] text-[#419EFF]' : 'border-transparent text-[#666666] hover:text-[#333333]'
+                }`}
+              >
+                预警信息查看（情报中心）
+              </button>
             </div>
           </div>
         )}
@@ -89,21 +104,24 @@ export default function PersonnelManagement() {
                 <PersonnelDetail 
                   id={selectedId} 
                   onBack={handleBackToList} 
-                  onEdit={handleEdit} 
                 />
               )}
               {view === 'form' && (
                 <PersonnelForm 
                   id={selectedId} 
-                  onCancel={selectedId ? () => setView('detail') : handleBackToList} 
+                  onCancel={handleBackToList} 
                   onSave={handleSave} 
                 />
               )}
             </>
           ) : activeTab === 'punishment' ? (
             <PersonnelPunishmentManagement />
-          ) : (
+          ) : activeTab === 'blacklist' ? (
             <PersonnelBlacklistManagement />
+          ) : activeTab === 'key_personnel' ? (
+            <KeyPersonnelSearch />
+          ) : (
+            <WarningInformationCenter />
           )}
         </div>
       </div>

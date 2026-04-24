@@ -7,12 +7,23 @@ export default function InspectionRectification() {
   const [data, setData] = useState<Inspection[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Inspection | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const result = await api.inspection.getAll();
-        setData(result);
+        setData(result.map(item => ({
+          ...item,
+          enterprise: item.company || '某企业',
+          inspector: item.inspectors || '张警官',
+          result: item.situation === '正常' ? '合格' : '不合格',
+          rectificationStatus: item.situation === '正常' ? '已完成' : '待整改',
+          rectificationDeadline: '2024-05-10',
+          rectificationPlan: '拟对员工进行治安管理条例专项培训，完善进店登记制度。'
+        })));
       } catch (error) {
         console.error('Failed to fetch inspections:', error);
       } finally {
@@ -22,31 +33,36 @@ export default function InspectionRectification() {
     fetchData();
   }, []);
 
+  const openDetail = (item: Inspection) => {
+    setSelectedItem(item);
+    setShowDetail(true);
+  };
+
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100">
-            <div className="flex flex-wrap gap-4 items-end">
-              <div className="w-64">
-                <label className="block text-sm text-[#666666] mb-1.5">公司名称</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入公司名称" />
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">公司名称</label>
+                <input type="text" className="w-full h-8 px-3 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入公司名称" />
               </div>
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">整改状态</label>
-                <select className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1.5">整改状态</label>
+                <select className="w-full h-8 px-3 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
                   <option value="">全部</option>
                   <option value="待整改">待整改</option>
                   <option value="已整改">已整改</option>
                   <option value="逾期未整改">逾期未整改</option>
                 </select>
               </div>
-              <div className="flex space-x-2 ml-auto">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
+              <div className="flex space-x-2 ml-auto lg:col-span-1 border-l pl-4">
+                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
                   <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
+                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-xs font-medium">
                   <RotateCcw size={14} className="mr-1.5" /> 重置
                 </button>
               </div>
@@ -121,12 +137,17 @@ export default function InspectionRectification() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded text-xs ${row.status === '已完成' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}`}>
-                        {row.status}
+                      <span className={`px-2 py-0.5 rounded text-xs ${row.rectificationStatus === '已完成' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}`}>
+                        {row.rectificationStatus}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <button className="text-[#419EFF] hover:underline">详情</button>
+                      <button 
+                        onClick={() => openDetail(row)}
+                        className="text-[#419EFF] hover:underline"
+                      >
+                        详情
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -147,6 +168,82 @@ export default function InspectionRectification() {
           </div>
         </div>
       </div>
+
+      {/* 详情弹窗 */}
+      {showDetail && selectedItem && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+              <h3 className="font-bold text-gray-800">问题整改详情</h3>
+              <button onClick={() => setShowDetail(false)} className="text-gray-400 hover:text-gray-600">
+                <RotateCcw size={18} />
+              </button>
+            </div>
+            <div className="p-6 space-y-6 overflow-auto max-h-[70vh]">
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">受检单位</label>
+                  <p className="text-sm font-medium text-gray-800">{selectedItem.enterprise}</p>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">整改期限</label>
+                  <p className="text-sm font-medium text-orange-600">{(selectedItem as any).rectificationDeadline}</p>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">检查人员</label>
+                  <p className="text-sm font-medium text-gray-800">{selectedItem.inspector}</p>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">检查日期</label>
+                  <p className="text-sm font-medium text-gray-800">{selectedItem.date}</p>
+                </div>
+              </div>
+              
+              <div className="bg-red-50/50 p-4 rounded border border-red-100">
+                <label className="block text-xs font-bold text-red-800 mb-2">存在问题</label>
+                <p className="text-sm text-red-700 leading-relaxed">
+                  发现该单位特种维修人员张某某未持证上岗。同时店内消防器材部分过期。
+                </p>
+              </div>
+
+              <div className="bg-green-50/50 p-4 rounded border border-green-100">
+                <label className="block text-xs font-bold text-green-800 mb-2">整改方案</label>
+                <p className="text-sm text-green-700 leading-relaxed">
+                  {(selectedItem as any).rectificationPlan}
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-xs text-gray-400 mb-1">进度说明</label>
+                <div className="mt-2 space-y-3">
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0"></div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-700">2024-04-20 提交方案</p>
+                      <p className="text-xs text-gray-500">企业已提交书面整改方案及人员培训计划。</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-700">2024-04-15 现场查处</p>
+                      <p className="text-xs text-gray-500">下达责令限期整改通知书。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+              <button 
+                onClick={() => setShowDetail(false)}
+                className="px-6 py-2 bg-[#419EFF] text-white rounded text-sm font-medium hover:bg-blue-600 transition-colors"
+              >
+                我知道了
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

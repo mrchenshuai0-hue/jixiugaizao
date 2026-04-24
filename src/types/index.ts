@@ -7,6 +7,25 @@ export interface Enterprise {
   recordStatus: string;
   status: string;
   lastCheck: string;
+  legalRep?: string;
+  legalRepPhone?: string;
+  level?: string;
+  brandName?: string;
+  jurisdiction?: string;
+  registeredAddress?: string;
+  address?: string; // Standard address
+  standardAddressCode?: string;
+  longitude?: string;
+  latitude?: string;
+  economicType?: string;
+  economicTypeSpecific?: string;
+  bizPhone?: string;
+  principal?: string;
+  principalPhone?: string;
+  bizScope?: string;
+  registeredCapital?: string;
+  area?: string;
+  postalCode?: string;
 }
 
 export interface Personnel {
@@ -18,6 +37,7 @@ export interface Personnel {
   enterprise: string;
   position: string;
   status: string;
+  entryDate?: string;
 }
 
 export interface Vehicle {
@@ -55,6 +75,16 @@ export interface Inspection {
   status: string;
   method?: string;
   situation?: string;
+  inspectMethod?: string;
+  unitLevel?: string;
+  enterpriseStatus?: string;
+  isNormal?: string;
+  rectificationStatus?: string;
+  rectificationDeadline?: string;
+  rectificationPlan?: string;
+  unitCode?: string;
+  region?: string;
+  inspectionUnit?: string;
 }
 
 export interface Case {
@@ -67,4 +97,10 @@ export interface Case {
   caseName?: string;
   occurrenceTime?: string;
   caseType?: string;
+  registrar?: string;
+  violator?: string;
+  isInvestigated?: string;
+  company?: string;
+  involvedParties?: any[];
+  description?: string;
 }

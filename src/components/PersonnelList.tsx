@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCcw, Plus, Download, ChevronDown, Eye, Edit, User, ShieldCheck } from 'lucide-react';
+import { Search, RotateCcw, Plus, Download, ChevronDown, Eye, Edit, User, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { api } from '../api';
 import { Personnel } from '../types';
 
@@ -51,6 +51,16 @@ export default function PersonnelList({ onViewDetail, onAdd, onEdit }: Personnel
     }
   };
 
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const confirmDelete = () => {
+    if (deleteId) {
+      setData(prev => prev.filter(p => p.id !== deleteId));
+      setDeleteId(null);
+      setOpenDropdown(null);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5] relative">
       <div className="flex-1 p-3 overflow-auto custom-scrollbar">
@@ -58,46 +68,101 @@ export default function PersonnelList({ onViewDetail, onAdd, onEdit }: Personnel
           
           {/* 查询区 */}
           <div className="p-5 border-b border-gray-100">
-            <div className="flex flex-wrap gap-4 items-end">
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">姓名</label>
-                <input 
-                  type="text" 
-                  placeholder="请输入姓名" 
-                  className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] focus:ring-1 focus:ring-[#419EFF] transition-colors"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-3 items-end">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">行政区划</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+                  <option value="">全部</option>
+                  <option value="fz">福州市</option>
+                  <option value="xm">厦门市</option>
+                </select>
               </div>
-              <div className="w-56">
-                <label className="block text-sm text-[#666666] mb-1.5">身份证号</label>
-                <input 
-                  type="text" 
-                  placeholder="请输入身份证号" 
-                  className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] focus:ring-1 focus:ring-[#419EFF] transition-colors"
-                />
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">公司名称</label>
+                <input type="text" placeholder="请输入公司名称" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
               </div>
-              <div className="w-56">
-                <label className="block text-sm text-[#666666] mb-1.5">所属企业</label>
-                <input 
-                  type="text" 
-                  placeholder="支持模糊查询" 
-                  className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] focus:ring-1 focus:ring-[#419EFF] transition-colors"
-                />
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">企业编码</label>
+                <input type="text" placeholder="请输入企业编码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
               </div>
-              <div className="w-36">
-                <label className="block text-sm text-[#666666] mb-1.5">人员状态</label>
-                <select className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] focus:ring-1 focus:ring-[#419EFF] bg-white transition-colors">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">企业状态</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="正常">正常</option>
+                  <option value="歇业">歇业</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">证件号码</label>
+                <input type="text" placeholder="请输入证件号码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">人员姓名</label>
+                <input type="text" placeholder="请输入姓名" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">电话号码</label>
+                <input type="text" placeholder="请输入电话" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">是否受过处罚</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="1">是</option>
+                  <option value="0">否</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">工作工种</label>
+                <input type="text" placeholder="请输入工种" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">人员类型</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="1">国内人员</option>
+                  <option value="2">境外人员</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">人员状态</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
                   <option value="">全部</option>
                   <option value="1">在职</option>
                   <option value="0">离职</option>
-                  <option value="2">待审核</option>
                 </select>
               </div>
-              <div className="flex space-x-2 ml-auto">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">性别</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">数据来源</label>
+                <input type="text" placeholder="请输入来源" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">采集方式</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="1">手动采集</option>
+                  <option value="2">系统导入</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">登记时间</label>
+                <input type="date" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div className="flex space-x-2 pt-2 justify-end lg:col-span-1 xl:col-span-5">
+                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
                   <Search size={14} className="mr-1.5" />
                   查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 hover:text-[#333333] transition-colors flex items-center text-sm font-medium">
+                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 hover:text-[#333333] transition-colors flex items-center text-xs font-medium">
                   <RotateCcw size={14} className="mr-1.5" />
                   重置
                 </button>
@@ -211,17 +276,23 @@ export default function PersonnelList({ onViewDetail, onAdd, onEdit }: Personnel
                         </button>
                         <div className="relative">
                           <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                             onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
                           >
-                            更多 <ChevronDown size={14} className="ml-0.5" />
+                            <ChevronDown size={14} />
                           </button>
                           {openDropdown === row.id && (
                             <>
                               <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
-                                <button className="w-full text-left px-4 py-2 text-sm text-[#333333] hover:bg-blue-50 hover:text-[#419EFF]">
-                                  资格核验
+                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1 overflow-hidden">
+                                <button 
+                                  onClick={(e) => { 
+                                    e.stopPropagation(); 
+                                    setDeleteId(row.id);
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 flex items-center transition-colors"
+                                >
+                                  删除
                                 </button>
                               </div>
                             </>
@@ -249,6 +320,39 @@ export default function PersonnelList({ onViewDetail, onAdd, onEdit }: Personnel
 
         </div>
       </div>
+
+      {/* 删除确认弹窗 */}
+      {deleteId && (
+        <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 shrink-0">
+                  <AlertTriangle size={24} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-800">确认删除</h3>
+                  <p className="text-sm text-gray-500 mt-1">您确定要删除该从业人员吗？此操作不可撤销。</p>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 mt-6">
+                <button 
+                  onClick={() => setDeleteId(null)}
+                  className="px-4 py-2 bg-white border border-gray-300 text-gray-600 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
+                >
+                  取消
+                </button>
+                <button 
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-500 text-white rounded text-sm font-medium hover:bg-red-600 transition-colors"
+                >
+                  确认删除
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

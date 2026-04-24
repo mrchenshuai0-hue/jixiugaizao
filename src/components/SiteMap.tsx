@@ -127,7 +127,7 @@ export default function SiteMap() {
                     </ul>
                   ) : (
                     <div className="pl-5 ml-0.5 border-l-2 border-transparent">
-                      <span className="text-xs text-[#999999] italic flex items-center">
+                      <span className="text-xs text-[#999999] flex items-center">
                         <ChevronRight size={12} className="mr-1" /> 暂无子页面
                       </span>
                     </div>

@@ -1,11 +1,11 @@
 import { Personnel } from '../types';
 
 const mockPersonnel: Personnel[] = [
-  { id: '1', name: '张三', gender: '男', idCard: '350102199001011234', position: '维修工', enterprise: '福州市鼓楼区安达汽车维修服务部', status: '在职', phone: '13800138001' },
-  { id: '2', name: '李四', gender: '男', idCard: '350102198505055678', position: '技术负责人', enterprise: '福州市鼓楼区安达汽车维修服务部', status: '在职', phone: '13800138002' },
-  { id: '3', name: '王五', gender: '男', idCard: '350102199208089012', position: '治安负责人', enterprise: '台江区顺风机动车修配厂', status: '在职', phone: '13800138003' },
-  { id: '4', name: '赵六', gender: '女', idCard: '350102199512123456', position: '前台接待', enterprise: '晋安区通达汽修厂', status: '离职', phone: '13800138004' },
-  { id: '5', name: '陈七', gender: '男', idCard: '350102198806067890', position: '钣金工', enterprise: '马尾区远航汽车维修中心', status: '在职', phone: '13800138005' },
+  { id: '1', name: '张三', gender: '男', idCard: '350102199001011234', position: '维修工', enterprise: '福州市鼓楼区安达汽车维修服务部', status: '在职', phone: '13800138001', entryDate: '2023-05-10' },
+  { id: '2', name: '李四', gender: '男', idCard: '350102198505055678', position: '技术负责人', enterprise: '福州市鼓楼区安达汽车维修服务部', status: '在职', phone: '13800138002', entryDate: '2022-11-15' },
+  { id: '3', name: '王五', gender: '男', idCard: '350102199208089012', position: '治安负责人', enterprise: '台江区顺风机动车修配厂', status: '在职', phone: '13800138003', entryDate: '2024-01-20' },
+  { id: '4', name: '赵六', gender: '女', idCard: '350102199512123456', position: '前台接待', enterprise: '晋安区通达汽修厂', status: '离职', phone: '13800138004', entryDate: '2021-03-01' },
+  { id: '5', name: '陈七', gender: '男', idCard: '350102198806067890', position: '钣金工', enterprise: '马尾区远航汽车维修中心', status: '在职', phone: '13800138005', entryDate: '2023-09-12' },
 ];
 
 export const personnelService = {

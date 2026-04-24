@@ -8,17 +8,48 @@ import {
   ChevronDown, 
   ChevronRight,
   ShieldAlert,
-  Home
+  Home,
+  ClipboardCheck,
+  GripVertical
 } from 'lucide-react';
+import {
+  DndContext, 
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { ThemeType } from '../App';
 
-const menuData = [
+const initialMenuData = [
   {
+    id: '首页',
     title: '首页',
     icon: <Home size={20} />,
     children: []
   },
   {
+    id: '申报审核管理',
+    title: '申报审核管理',
+    icon: <ClipboardCheck size={20} />,
+    children: [
+      { title: '我的代办' },
+      { title: '申报事项' },
+      { title: '办结事项' }
+    ]
+  },
+  {
+    id: '机修业管理',
     title: '机修业管理',
     icon: <Wrench size={20} />,
     expanded: true,
@@ -31,6 +62,7 @@ const menuData = [
     ]
   },
   {
+    id: '承修信息',
     title: '承修信息',
     icon: <Car size={20} />,
     children: [
@@ -39,6 +71,7 @@ const menuData = [
     ]
   },
   {
+    id: '统计分析',
     title: '统计分析',
     icon: <BarChart2 size={20} />,
     children: [
@@ -50,6 +83,7 @@ const menuData = [
     ]
   },
   {
+    id: '分级管理',
     title: '分级管理',
     icon: <Layers size={20} />,
     children: [
@@ -58,6 +92,7 @@ const menuData = [
     ]
   },
   {
+    id: '系统与支撑',
     title: '系统与支撑',
     icon: <Settings size={20} />,
     children: [
@@ -76,16 +111,120 @@ interface SidebarProps {
   theme: ThemeType;
 }
 
+function SortableMenuItem({ menu, expandedMenus, toggleMenu, activeMenu, setActiveMenu, current }: any) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: menu.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 10 : 1,
+  };
+
+  const isTopLevelActive = activeMenu === menu.title && menu.children.length === 0;
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <div className="group relative">
+        {/* Drag Handle */}
+        <div 
+          {...attributes} 
+          {...listeners}
+          className={`absolute left-1 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing p-1 opacity-0 group-hover:opacity-100 transition-opacity ${current.icon}`}
+        >
+          <GripVertical size={14} />
+        </div>
+
+        <button
+          onClick={() => {
+            if (menu.children.length > 0) {
+              toggleMenu(menu.title);
+            } else {
+              setActiveMenu(menu.title);
+            }
+          }}
+          className={`w-full flex items-center justify-between px-6 py-3 transition-colors ${
+            isTopLevelActive ? current.menuActive : current.menuHover
+          }`}
+        >
+          <div className="flex items-center">
+            <span className={`mr-3 ${isTopLevelActive ? current.menuActiveText : current.icon}`}>{menu.icon}</span>
+            <span className={`font-medium text-sm ${isTopLevelActive ? current.menuActiveText : ''}`}>{menu.title}</span>
+          </div>
+          {menu.children.length > 0 && (
+            <span className={current.icon}>
+              {expandedMenus[menu.title] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </span>
+          )}
+        </button>
+      </div>
+      
+      {menu.children.length > 0 && expandedMenus[menu.title] && (
+        <div className={`space-y-0 py-1 ${current.expandedBg}`}>
+          {menu.children.map((child: any) => {
+            const isChildActive = activeMenu === child.title;
+            return (
+              <button
+                key={child.title}
+                onClick={() => setActiveMenu(child.title)}
+                className={`w-full text-left pl-14 pr-6 py-2.5 text-sm transition-colors ${
+                  isChildActive 
+                    ? current.subMenuActive 
+                    : `${current.subMenuText} ${current.subMenuHover}`
+                }`}
+              >
+                {child.title}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Sidebar({ activeMenu, setActiveMenu, theme }: SidebarProps) {
+  const [menus, setMenus] = useState(initialMenuData);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
     '机修业管理': true
   });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const toggleMenu = (title: string) => {
     setExpandedMenus(prev => ({
       ...prev,
       [title]: !prev[title]
     }));
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (active.id !== over?.id) {
+      setMenus((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over?.id);
+        
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
   };
 
   const themeStyles = {
@@ -146,58 +285,30 @@ export default function Sidebar({ activeMenu, setActiveMenu, theme }: SidebarPro
       </div>
       
       <div className="flex-1 overflow-y-auto py-4 custom-scrollbar">
-        <nav className="space-y-0">
-          {menuData.map((menu) => {
-            const isTopLevelActive = activeMenu === menu.title && menu.children.length === 0;
-            return (
-              <div key={menu.title}>
-                <button
-                  onClick={() => {
-                    if (menu.children.length > 0) {
-                      toggleMenu(menu.title);
-                    } else {
-                      setActiveMenu(menu.title);
-                    }
-                  }}
-                  className={`w-full flex items-center justify-between px-6 py-3 transition-colors ${
-                    isTopLevelActive ? current.menuActive : current.menuHover
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <span className={`mr-3 ${isTopLevelActive ? current.menuActiveText : current.icon}`}>{menu.icon}</span>
-                    <span className={`font-medium text-sm ${isTopLevelActive ? current.menuActiveText : ''}`}>{menu.title}</span>
-                  </div>
-                  {menu.children.length > 0 && (
-                    <span className={current.icon}>
-                      {expandedMenus[menu.title] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                    </span>
-                  )}
-                </button>
-                
-                {menu.children.length > 0 && expandedMenus[menu.title] && (
-                  <div className={`space-y-0 py-1 ${current.expandedBg}`}>
-                    {menu.children.map((child) => {
-                      const isChildActive = activeMenu === child.title;
-                      return (
-                        <button
-                          key={child.title}
-                          onClick={() => setActiveMenu(child.title)}
-                          className={`w-full text-left pl-14 pr-6 py-2.5 text-sm transition-colors ${
-                            isChildActive 
-                              ? current.subMenuActive 
-                              : `${current.subMenuText} ${current.subMenuHover}`
-                          }`}
-                        >
-                          {child.title}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </nav>
+        <DndContext 
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <nav className="space-y-0">
+            <SortableContext 
+              items={menus.map(m => m.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {menus.map((menu) => (
+                <SortableMenuItem 
+                  key={menu.id}
+                  menu={menu}
+                  expandedMenus={expandedMenus}
+                  toggleMenu={toggleMenu}
+                  activeMenu={activeMenu}
+                  setActiveMenu={setActiveMenu}
+                  current={current}
+                />
+              ))}
+            </SortableContext>
+          </nav>
+        </DndContext>
       </div>
       
       <div className={`p-4 border-t ${current.footerBorder} text-xs text-center shrink-0 ${current.footerText}`}>

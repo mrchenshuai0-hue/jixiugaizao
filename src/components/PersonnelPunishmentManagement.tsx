@@ -6,12 +6,20 @@ import { PersonnelPunishment } from '../services/personnelPunishmentService';
 interface PunishmentListProps {
   onAdd: () => void;
   onView: (id: string) => void;
+  onEdit: (id: string) => void;
 }
 
-function PunishmentList({ onAdd, onView }: PunishmentListProps) {
+function PunishmentList({ onAdd, onView, onEdit }: PunishmentListProps) {
   const [data, setData] = useState<PersonnelPunishment[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const handleDelete = (id: string) => {
+    if (window.confirm('确定要删除该处罚记录吗？')) {
+      setData(prev => prev.filter(p => p.id !== id));
+      setOpenDropdown(null);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,20 +41,56 @@ function PunishmentList({ onAdd, onView }: PunishmentListProps) {
       <div className="flex-1 p-3 overflow-auto">
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           <div className="p-5 border-b border-gray-100">
-            <div className="flex flex-wrap gap-4 items-end">
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">被处罚人姓名</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入姓名" />
+            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">行政区划</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="mw">马尾分局</option>
+                  <option value="cs">仓山分局</option>
+                </select>
               </div>
-              <div className="w-56">
-                <label className="block text-sm text-[#666666] mb-1.5">工作单位</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入单位名称" />
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">公司名称</label>
+                <input type="text" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入公司名称" />
               </div>
-              <div className="flex space-x-2 ml-auto">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">被处罚人</label>
+                <input type="text" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入姓名" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">处罚日期</label>
+                <input type="date" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">案件编号</label>
+                <input type="text" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入编号" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">处罚文号</label>
+                <input type="text" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入文号" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">案件类别</label>
+                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
+                  <option value="">全部</option>
+                  <option value="1">治安案件</option>
+                  <option value="2">刑事案件</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">罚款金额</label>
+                <input type="number" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入金额" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#666666] mb-1">办案单位</label>
+                <input type="text" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入单位" />
+              </div>
+              <div className="flex space-x-2 ml-auto pt-2">
+                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
                   <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
+                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-xs font-medium">
                   <RotateCcw size={14} className="mr-1.5" /> 重置
                 </button>
               </div>
@@ -71,7 +115,7 @@ function PunishmentList({ onAdd, onView }: PunishmentListProps) {
                   <th className="px-4 py-3 font-medium">处罚种类</th>
                   <th className="px-4 py-3 font-medium">处罚金额</th>
                   <th className="px-4 py-3 font-medium">状态</th>
-                  <th className="px-4 py-3 font-medium text-center w-24">操作</th>
+                  <th className="px-4 py-3 font-medium text-center w-32">操作</th>
                 </tr>
               </thead>
               <tbody className="text-sm text-[#666666]">
@@ -101,20 +145,24 @@ function PunishmentList({ onAdd, onView }: PunishmentListProps) {
                       </span>
                     </td>
                     <td className={`px-4 py-3 text-center sticky right-0 bg-white shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.02)] group-hover:bg-blue-50/50 transition-colors ${openDropdown === row.id ? 'z-50' : 'z-10'}`}>
-                      <div className="flex items-center justify-center space-x-2">
-                        <button onClick={() => onView(row.id)} className="text-[#419EFF] hover:text-blue-700 font-medium">详情</button>
-                        <div className="relative">
+                      <div className="flex items-center justify-center space-x-2 text-[#419EFF]">
+                        <button onClick={() => onView(row.id)} className="hover:text-blue-700 font-medium">详情</button>
+                        <button onClick={() => onEdit(row.id)} className="hover:text-blue-700 font-medium">修改</button>
+                        <div className="relative ml-1">
                           <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                            className="hover:text-blue-700 font-medium flex items-center p-1"
                             onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
                           >
-                            更多 <ChevronDown size={14} className="ml-0.5" />
+                            <ChevronDown size={14} />
                           </button>
                           {openDropdown === row.id && (
                             <>
                               <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
-                                <button className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50">
+                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-[60] py-1 overflow-hidden text-left">
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); handleDelete(row.id); }}
+                                  className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 flex items-center transition-colors"
+                                >
                                   删除
                                 </button>
                               </div>
@@ -296,7 +344,11 @@ export default function PersonnelPunishmentManagement() {
   return (
     <div className="h-full w-full">
       {view === 'list' ? (
-        <PunishmentList onAdd={() => setView('form')} onView={(id) => setView('form')} />
+        <PunishmentList 
+          onAdd={() => setView('form')} 
+          onView={(id) => setView('form')} 
+          onEdit={(id) => setView('form')} 
+        />
       ) : (
         <PunishmentForm onCancel={() => setView('list')} onSave={() => setView('list')} />
       )}

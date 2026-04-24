@@ -1,11 +1,11 @@
 import { Enterprise } from '../types';
 
 const mockEnterprises: Enterprise[] = [
-  { id: '1', name: '福州市鼓楼区安达汽车维修服务部', uscc: '91350102MA34567890', category: '二类维修', region: '福州市鼓楼区', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-10-15)' },
-  { id: '2', name: '台江区顺风机动车修配厂', uscc: '91350103MA12345678', category: '三类维修', region: '福州市台江区', recordStatus: '未备案', status: '正常营业', lastCheck: '未检查' },
-  { id: '3', name: '仓山区捷豹汽车服务有限公司', uscc: '91350104MA87654321', category: '一类维修', region: '福州市仓山区', recordStatus: '备案过期', status: '歇业', lastCheck: '不合格 (2023-09-20)' },
-  { id: '4', name: '晋安区通达汽修厂', uscc: '91350105MA23456789', category: '二类维修', region: '福州市晋安区', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-11-02)' },
-  { id: '5', name: '马尾区远航汽车维修中心', uscc: '91350105MA23456789', category: '摩托车维修', region: '福州市马尾区', recordStatus: '待审核', status: '正常营业', lastCheck: '合格 (2023-11-05)' },
+  { id: '1', name: '福州市鼓楼区安达汽车维修服务部', uscc: '91350102MA34567890', category: '二类维修', region: '福州市鼓楼区', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-10-15)', legalRep: '张安达', legalRepPhone: '13811112222' },
+  { id: '2', name: '台江区顺风机动车修配厂', uscc: '91350103MA12345678', category: '三类维修', region: '福州市台江区', recordStatus: '未备案', status: '正常营业', lastCheck: '未检查', legalRep: '王顺风', legalRepPhone: '13933334444' },
+  { id: '3', name: '仓山区捷豹汽车服务有限公司', uscc: '91350104MA87654321', category: '一类维修', region: '福州市仓山区', recordStatus: '备案过期', status: '歇业', lastCheck: '不合格 (2023-09-20)', legalRep: '林捷豹', legalRepPhone: '13755556666' },
+  { id: '4', name: '晋安区通达汽修厂', uscc: '91350105MA23456789', category: '二类维修', region: '福州市晋安区', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-11-02)', legalRep: '陈通达', legalRepPhone: '13677778888' },
+  { id: '5', name: '马尾区远航汽车维修中心', uscc: '91350105MA23456789', category: '摩托车维修', region: '福州市马尾区', recordStatus: '待审核', status: '正常营业', lastCheck: '合格 (2023-11-05)', legalRep: '郑远航', legalRepPhone: '13599990000' },
 ];
 
 export const enterpriseService = {

@@ -7,7 +7,7 @@ interface BlacklistListProps {
   onAdd: () => void;
 }
 
-function BlacklistList({ onAdd }: BlacklistListProps) {
+function BlacklistList({ onAdd, onEdit, onRemove }: { onAdd: () => void, onEdit: (item: PersonnelBlacklist) => void, onRemove: (id: string) => void }) {
   const [data, setData] = useState<PersonnelBlacklist[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -91,21 +91,30 @@ function BlacklistList({ onAdd }: BlacklistListProps) {
                     <td className="px-4 py-3">{row.reason}</td>
                     <td className="px-4 py-3">{row.date}</td>
                     <td className="px-4 py-3">{row.operator}</td>
-                    <td className={`px-4 py-3 text-center sticky right-0 bg-white shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.02)] group-hover:bg-blue-50/50 transition-colors ${openDropdown === row.id ? 'z-50' : 'z-10'}`}>
-                      <div className="flex items-center justify-center space-x-2">
+                    <td className={`px-4 py-3 text-center sticky right-0 bg-white shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.02)] transition-colors ${openDropdown === row.id ? 'z-[60]' : 'z-10'}`}>
+                      <div className="flex items-center justify-center space-x-3">
+                        <button 
+                          onClick={() => onEdit(row)}
+                          className="text-[#419EFF] hover:text-blue-700 font-medium text-sm flex items-center"
+                        >
+                          修改
+                        </button>
                         <div className="relative">
                           <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                             onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
                           >
-                            更多 <ChevronDown size={14} className="ml-0.5" />
+                            <ChevronDown size={14} />
                           </button>
                           {openDropdown === row.id && (
                             <>
                               <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
-                                <button className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50">
-                                  移出
+                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1 overflow-hidden text-left">
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); onRemove(row.id); setOpenDropdown(null); }}
+                                  className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors flex items-center"
+                                >
+                                  <Trash2 size={14} className="mr-2" /> 移出
                                 </button>
                               </div>
                             </>
@@ -124,34 +133,35 @@ function BlacklistList({ onAdd }: BlacklistListProps) {
   );
 }
 
-function BlacklistForm({ onCancel, onSave }: { onCancel: () => void, onSave: () => void }) {
+function BlacklistForm({ item, onCancel, onSave }: { item?: PersonnelBlacklist | null, onCancel: () => void, onSave: () => void }) {
+  const isEdit = !!item;
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 bg-[#419EFF] text-white flex justify-between items-center">
-          <h2 className="text-lg font-bold">黑名单登记</h2>
-          <button onClick={onCancel} className="text-white/80 hover:text-white"><X size={20} /></button>
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="px-6 py-4 border-b border-gray-200 bg-[#fa5e45] text-white flex justify-between items-center">
+          <h2 className="text-lg font-bold">{isEdit ? '修改黑名单信息' : '黑名单登记'}</h2>
+          <button onClick={onCancel} className="text-white/80 hover:text-white transition-colors"><X size={20} /></button>
         </div>
         <div className="p-8 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-[#333333] mb-2">
+            <label className="block text-sm font-medium text-[#333333] mb-2 flex items-center">
               <span className="text-[#fa5e45] mr-1">*</span>姓名
             </label>
-            <input type="text" className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入姓名" />
+            <input type="text" className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:border-[#fa5e45]" placeholder="请输入姓名" defaultValue={item?.name} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#333333] mb-2">
+            <label className="block text-sm font-medium text-[#333333] mb-2 flex items-center">
               <span className="text-[#fa5e45] mr-1">*</span>身份证号
             </label>
-            <input type="text" className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入身份证号" />
+            <input type="text" className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:border-[#fa5e45]" placeholder="请输入身份证号" defaultValue={item?.idCard} />
           </div>
           <div>
             <label className="block text-sm font-medium text-[#333333] mb-2">列入原因</label>
-            <textarea className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] text-sm" rows={3} placeholder="请输入列入原因"></textarea>
+            <textarea className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-[#fa5e45] text-sm" rows={3} placeholder="请输入列入原因" defaultValue={item?.reason}></textarea>
           </div>
           <div className="flex justify-center pt-4">
-            <button onClick={onSave} className="px-10 py-2.5 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center font-medium">
-              <Edit size={18} className="mr-2" /> 保存
+            <button onClick={onSave} className="px-10 py-2.5 bg-[#fa5e45] text-white rounded hover:bg-red-600 transition-colors flex items-center font-medium">
+              <Save size={18} className="mr-2" /> 保存
             </button>
           </div>
         </div>
@@ -162,12 +172,66 @@ function BlacklistForm({ onCancel, onSave }: { onCancel: () => void, onSave: () 
 
 export default function PersonnelBlacklistManagement() {
   const [showForm, setShowForm] = useState(false);
+  const [editingItem, setEditingItem] = useState<PersonnelBlacklist | null>(null);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+
+  const handleAdd = () => {
+    setEditingItem(null);
+    setShowForm(true);
+  };
+
+  const handleEdit = (item: PersonnelBlacklist) => {
+    setEditingItem(item);
+    setShowForm(true);
+  };
 
   return (
     <div className="h-full w-full relative">
-      <BlacklistList onAdd={() => setShowForm(true)} />
+      <BlacklistList 
+        onAdd={handleAdd} 
+        onEdit={handleEdit}
+        onRemove={(id) => setRemovingId(id)}
+      />
+      
       {showForm && (
-        <BlacklistForm onCancel={() => setShowForm(false)} onSave={() => setShowForm(false)} />
+        <BlacklistForm 
+          item={editingItem}
+          onCancel={() => setShowForm(false)} 
+          onSave={() => setShowForm(false)} 
+        />
+      )}
+
+      {/* 移出确认弹窗 */}
+      {removingId && (
+        <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-600 mx-auto mb-4">
+                <Trash2 size={32} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-800">确认移出</h3>
+              <p className="text-sm text-gray-500 mt-2">您确定要将该人员从黑名单中移出吗？</p>
+              <div className="flex justify-center gap-3 mt-8">
+                <button 
+                  onClick={() => setRemovingId(null)}
+                  className="px-6 py-2 bg-white border border-gray-300 text-gray-600 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
+                >
+                  取消
+                </button>
+                <button 
+                  onClick={() => {
+                    // Actual remove logic would be here
+                    setRemovingId(null);
+                    alert('已成功移出黑名单');
+                  }}
+                  className="px-6 py-2 bg-[#fa5e45] text-white rounded text-sm font-medium hover:bg-red-600 transition-colors"
+                >
+                  确认移出
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

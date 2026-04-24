@@ -20,6 +20,7 @@ import UserManagement from './components/system/UserManagement';
 import RoleManagement from './components/system/RoleManagement';
 import PermissionManagement from './components/system/PermissionManagement';
 import SystemMonitor from './components/system/SystemMonitor';
+import DeclarationManagement from './components/DeclarationManagement';
 
 export type ThemeType = 'light' | 'dark' | 'theme';
 
@@ -62,6 +63,10 @@ export default function App() {
   const renderContent = (id: string) => {
     switch (id) {
       case '首页': return <Home onNavigate={openTab} />;
+      case '我的代办': return <DeclarationManagement initialTab="todo" />;
+      case '申报事项': return <DeclarationManagement initialTab="declaration" />;
+      case '办结事项': return <DeclarationManagement initialTab="done" />;
+      case '申报审核管理': return <DeclarationManagement initialTab="todo" />;
       case '备案信息': return <RecordInfoDisplay />;
       case '企业基础信息': return <EnterpriseManagement onNavigate={openTab} />;
       case '从业人员信息': return <PersonnelManagement />;
@@ -98,7 +103,7 @@ export default function App() {
   return (
     <div className="flex h-screen w-full bg-[#F5F5F5] overflow-hidden font-sans">
       <Sidebar activeMenu={activeTabId} setActiveMenu={openTab} theme={sidebarTheme} />
-      <div className="flex flex-col flex-1 overflow-hidden relative">
+      <div className="flex flex-col flex-1 overflow-hidden relative min-w-0">
         <Header 
           activeMenu={activeTabId} 
           tabs={tabs} 

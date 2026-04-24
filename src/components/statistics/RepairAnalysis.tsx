@@ -29,7 +29,7 @@ export default function RepairAnalysis() {
           <Map size={16} className="mr-2" /> 车辆维修轨迹
         </button>
       </div>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto min-w-0">
         {activeTab === '高频维修车辆' && <HighFrequencyRepair />}
         {activeTab === '送取车人员' && <PersonnelAnalysis />}
         {activeTab === '车辆维修轨迹' && <VehicleTrajectory />}

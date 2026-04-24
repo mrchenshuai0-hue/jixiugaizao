@@ -91,7 +91,7 @@ export default function EnterpriseTrendStatistics() {
 
   const chart = (
     <div className="grid grid-cols-2 gap-6">
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">企业新增趋势</h3>
         <ResponsiveContainer width="100%" height={256}>
           <AreaChart data={trendData}>
@@ -103,7 +103,7 @@ export default function EnterpriseTrendStatistics() {
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">企业类型分布</h3>
         <ResponsiveContainer width="100%" height={256}>
           <BarChart data={typeData}>
@@ -116,7 +116,7 @@ export default function EnterpriseTrendStatistics() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">辖区企业分布</h3>
         <ResponsiveContainer width="100%" height={256}>
           <BarChart data={regionData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -129,7 +129,7 @@ export default function EnterpriseTrendStatistics() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4 border border-gray-200 rounded-md min-w-0">
         <h3 className="text-sm font-semibold mb-4 text-gray-700">企业状态分布</h3>
         <ResponsiveContainer width="100%" height={256}>
           <PieChart>

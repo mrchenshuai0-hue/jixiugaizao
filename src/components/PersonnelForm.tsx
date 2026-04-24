@@ -112,7 +112,9 @@ export default function PersonnelForm({ id, onCancel, onSave }: PersonnelFormPro
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#333333] mb-1.5">出生日期</label>
+                      <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
+                        <span className="text-[#fa5e45] mr-1">*</span>出生日期
+                      </label>
                       <input type="date" className="w-full h-9 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] transition-colors" defaultValue={isEdit ? '1990-01-01' : ''} />
                     </div>
 
@@ -129,7 +131,7 @@ export default function PersonnelForm({ id, onCancel, onSave }: PersonnelFormPro
                       <>
                         <div className="md:col-span-2">
                           <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
-                            户籍所在地
+                            <span className="text-[#fa5e45] mr-1">*</span>户籍所在地
                             <button className="ml-auto text-[#419EFF] hover:underline flex items-center text-xs"><Search size={12} className="mr-1" />选择</button>
                           </label>
                           <input type="text" className="w-full h-9 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] transition-colors" placeholder="请选择户籍所在地" />
@@ -199,15 +201,21 @@ export default function PersonnelForm({ id, onCancel, onSave }: PersonnelFormPro
                           </select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-[#333333] mb-1.5">有效期至</label>
+                          <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
+                            <span className="text-[#fa5e45] mr-1">*</span>有效期至
+                          </label>
                           <input type="date" className="w-full h-9 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] transition-colors" />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-[#333333] mb-1.5">入境口岸</label>
+                          <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
+                            入境口岸
+                          </label>
                           <input type="text" className="w-full h-9 px-3 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] transition-colors" placeholder="请输入入境口岸" />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-[#333333] mb-1.5">入境日期</label>
+                          <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
+                            <span className="text-[#fa5e45] mr-1">*</span>入境日期
+                          </label>
                           <input type="date" className="w-full h-9 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] transition-colors" />
                         </div>
                       </>
@@ -281,7 +289,9 @@ export default function PersonnelForm({ id, onCancel, onSave }: PersonnelFormPro
                   <input type="text" className="w-full h-9 px-3 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] transition-colors" placeholder="请输入人事编号" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#333333] mb-1.5">入职日期</label>
+                  <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
+                    <span className="text-[#fa5e45] mr-1">*</span>入职日期
+                  </label>
                   <input type="date" className="w-full h-9 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] transition-colors" defaultValue="2026-04-14" />
                 </div>
                 <div>
@@ -309,7 +319,9 @@ export default function PersonnelForm({ id, onCancel, onSave }: PersonnelFormPro
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-[#333333] mb-1.5">就业单位名称</label>
+                  <label className="block text-sm font-medium text-[#333333] mb-1.5 flex items-center">
+                    <span className="text-[#fa5e45] mr-1">*</span>就业单位名称
+                  </label>
                   <input type="text" className="w-full h-9 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] transition-colors" placeholder="请输入就业单位名称" />
                 </div>
                 <div>

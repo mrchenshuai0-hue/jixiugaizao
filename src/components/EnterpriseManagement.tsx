@@ -34,11 +34,8 @@ export default function EnterpriseManagement({ onNavigate }: EnterpriseManagemen
   };
 
   const handleSave = () => {
-    if (selectedId) {
-      setView('detail');
-    } else {
-      setView('list');
-    }
+    setView('list');
+    setSelectedId(null);
   };
 
   return (
@@ -55,14 +52,13 @@ export default function EnterpriseManagement({ onNavigate }: EnterpriseManagemen
           <EnterpriseDetail 
             id={selectedId} 
             onBack={handleBackToList} 
-            onEdit={handleEdit} 
             onNavigate={onNavigate}
           />
         )}
         {view === 'form' && (
           <EnterpriseForm 
             id={selectedId} 
-            onCancel={selectedId ? () => setView('detail') : handleBackToList} 
+            onCancel={handleBackToList} 
             onSave={handleSave} 
           />
         )}

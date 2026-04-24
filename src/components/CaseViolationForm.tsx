@@ -16,6 +16,7 @@ export default function CaseViolationForm({ onCancel, onSave }: CaseViolationFor
     caseNo: '',
     nature: '刑事案件',
     category: '',
+    isInvestigated: '未查处',
     description: ''
   });
 
@@ -171,6 +172,35 @@ export default function CaseViolationForm({ onCancel, onSave }: CaseViolationFor
                     <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#419EFF]">
                       <Search size={18} />
                     </button>
+                  </div>
+                </div>
+
+                {/* 是否查处 */}
+                <div>
+                  <label className="block text-sm font-medium text-[#666666] mb-2">
+                    <span className="text-[#fa5e45] mr-1">*</span>是否查处
+                  </label>
+                  <div className="flex space-x-6 h-10 items-center">
+                    <label className="flex items-center cursor-pointer group">
+                      <input 
+                        type="radio" 
+                        name="isInvestigated" 
+                        className="w-4 h-4 text-[#419EFF] border-gray-300 focus:ring-[#419EFF]"
+                        checked={formData.isInvestigated === '未查处'}
+                        onChange={() => setFormData({...formData, isInvestigated: '未查处'})}
+                      />
+                      <span className="ml-2 text-sm text-[#333333] group-hover:text-[#419EFF]">未查处</span>
+                    </label>
+                    <label className="flex items-center cursor-pointer group">
+                      <input 
+                        type="radio" 
+                        name="isInvestigated" 
+                        className="w-4 h-4 text-[#419EFF] border-gray-300 focus:ring-[#419EFF]"
+                        checked={formData.isInvestigated === '已查处'}
+                        onChange={() => setFormData({...formData, isInvestigated: '已查处'})}
+                      />
+                      <span className="ml-2 text-sm text-[#333333] group-hover:text-[#419EFF]">已查处</span>
+                    </label>
                   </div>
                 </div>
 
