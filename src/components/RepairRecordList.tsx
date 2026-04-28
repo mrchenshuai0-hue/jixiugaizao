@@ -30,6 +30,46 @@ export default function RepairRecordList({ onView }: RepairRecordListProps) {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
+              <History size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">维修记录总数</div>
+              <div className="text-xl font-bold text-gray-800">15,642</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
+              <LayoutGrid size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">今日新增记录</div>
+              <div className="text-xl font-bold text-gray-800">124</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
+               <RotateCcw size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">待接车/待取车</div>
+              <div className="text-xl font-bold text-gray-800">32</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-gray-50 rounded-full text-gray-500 mr-4">
+              <Search size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">查询总量</div>
+              <div className="text-xl font-bold text-gray-800">856</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询表单区域 */}
           <div className="p-4 border-b border-gray-100 bg-white">
@@ -146,10 +186,10 @@ export default function RepairRecordList({ onView }: RepairRecordListProps) {
                         </button>
                         <div className="relative">
                           <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                             onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
                           >
-                            更多 <ChevronDown size={14} className="ml-0.5" />
+                            <ChevronDown size={14} />
                           </button>
                           {openDropdown === row.id && (
                             <>

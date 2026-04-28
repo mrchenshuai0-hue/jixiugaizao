@@ -52,7 +52,7 @@ export default function Home({ onNavigate }: HomeProps) {
           icon={Users} 
           color="bg-green-500" 
           trend="+2.1%" 
-          onClick={() => handleNavigate('从业人员信息')}
+          onClick={() => handleNavigate('从业人员信息查询')}
         />
         <StatCard 
           title="待整改隐患" 
@@ -60,7 +60,7 @@ export default function Home({ onNavigate }: HomeProps) {
           icon={AlertTriangle} 
           color="bg-orange-500" 
           trend="-12.5%" 
-          onClick={() => handleNavigate('行政检查')}
+          onClick={() => handleNavigate('问题整改跟踪')}
         />
         <StatCard 
           title="本月行政检查" 
@@ -68,13 +68,13 @@ export default function Home({ onNavigate }: HomeProps) {
           icon={ShieldCheck} 
           color="bg-purple-500" 
           trend="+18.2%" 
-          onClick={() => handleNavigate('行政检查')}
+          onClick={() => handleNavigate('检查记录查询')}
         />
       </div>
 
       {/* 图表区 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleNavigate('承修情况统计分析')}>
+        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleNavigate('统计分析')}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800 flex items-center">
               <TrendingUp size={18} className="mr-2 text-[#419EFF]" />
@@ -100,23 +100,42 @@ export default function Home({ onNavigate }: HomeProps) {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleNavigate('承修情况统计分析')}>
+        <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800 flex items-center">
-              <Activity size={18} className="mr-2 text-[#419EFF]" />
-              各辖区高频维修统计
+              <Layers size={18} className="mr-2 text-[#419EFF]" />
+              场所等级评定分布
             </h2>
+            <button onClick={() => handleNavigate('等级评定管理')} className="text-xs text-[#419EFF] hover:underline">查看详情</button>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={repairData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" axisLine={false} tickLine={false} />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#419EFF" radius={[0, 4, 4, 0]} barSize={20} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="grid grid-cols-2 gap-4 h-64">
+            <div className="flex flex-col justify-center space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600 flex items-center"><div className="w-2 h-2 rounded-full bg-yellow-500 mr-2"></div>AAA级单位</span>
+                <span className="text-sm font-bold">128</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600 flex items-center"><div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>AA级单位</span>
+                <span className="text-sm font-bold">356</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600 flex items-center"><div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>A级单位</span>
+                <span className="text-sm font-bold">512</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600 flex items-center"><div className="w-2 h-2 rounded-full bg-red-500 mr-2"></div>B级单位</span>
+                <span className="text-sm font-bold">288</span>
+              </div>
+            </div>
+            <div className="relative flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full border-[12px] border-gray-100 flex items-center justify-center relative">
+                <div className="absolute inset-0 border-[12px] border-yellow-500 rounded-full clip-path-polygon-[0_0,100%_0,100%_30%,0_30%]"></div>
+                <div className="text-center">
+                  <div className="text-xl font-bold">1,284</div>
+                  <div className="text-[10px] text-gray-400">评定总数</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -161,7 +180,7 @@ export default function Home({ onNavigate }: HomeProps) {
           <div className="space-y-3">
             <div 
               className="flex items-center justify-between p-3 bg-blue-50 rounded-md border border-blue-100 cursor-pointer hover:bg-blue-100 transition-colors"
-              onClick={() => handleNavigate('等级评定')}
+              onClick={() => handleNavigate('等级评定管理')}
             >
               <div className="flex items-center">
                 <Layers size={16} className="text-blue-500 mr-2" />
@@ -171,7 +190,7 @@ export default function Home({ onNavigate }: HomeProps) {
             </div>
             <div 
               className="flex items-center justify-between p-3 bg-orange-50 rounded-md border border-orange-100 cursor-pointer hover:bg-orange-100 transition-colors"
-              onClick={() => handleNavigate('行政检查')}
+              onClick={() => handleNavigate('问题整改跟踪')}
             >
               <div className="flex items-center">
                 <AlertTriangle size={16} className="text-orange-500 mr-2" />

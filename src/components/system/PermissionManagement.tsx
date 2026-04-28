@@ -53,10 +53,10 @@ export default function PermissionManagement() {
                     <button className="text-[#419EFF] hover:text-blue-700 font-medium">编辑</button>
                     <div className="relative">
                       <button 
-                        className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                        className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                         onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === '1' ? null : '1'); }}
                       >
-                        更多 <ChevronDown size={14} className="ml-0.5" />
+                        <ChevronDown size={14} />
                       </button>
                       {openDropdown === '1' && (
                         <>
@@ -88,10 +88,10 @@ export default function PermissionManagement() {
                       <button className="text-[#419EFF] hover:text-blue-700 font-medium">编辑</button>
                       <div className="relative">
                         <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                           onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === '1-1' ? null : '1-1'); }}
                         >
-                          更多 <ChevronDown size={14} className="ml-0.5" />
+                          <ChevronDown size={14} />
                         </button>
                         {openDropdown === '1-1' && (
                           <>
@@ -123,10 +123,10 @@ export default function PermissionManagement() {
                       <button className="text-[#419EFF] hover:text-blue-700 font-medium">编辑</button>
                       <div className="relative">
                         <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                           onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === '1-1-1' ? null : '1-1-1'); }}
                         >
-                          更多 <ChevronDown size={14} className="ml-0.5" />
+                          <ChevronDown size={14} />
                         </button>
                         {openDropdown === '1-1-1' && (
                           <>

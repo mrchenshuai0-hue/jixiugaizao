@@ -9,10 +9,16 @@ import InspectionManagement from './components/InspectionManagement';
 import CaseManagement from './components/CaseManagement';
 import VehicleManagement from './components/VehicleManagement';
 import RepairRecordManagement from './components/RepairRecordManagement';
-import RepairAnalysis from './components/statistics/RepairAnalysis';
 import InspectionStatistics from './components/statistics/InspectionStatistics';
-import CaseStatistics from './components/statistics/CaseStatistics';
 import EnterpriseTrendStatistics from './components/statistics/EnterpriseTrendStatistics';
+import HighFrequencyRepair from './components/statistics/HighFrequencyRepair';
+import PersonnelAnalysis from './components/statistics/PersonnelAnalysis';
+import VehicleTrajectory from './components/statistics/VehicleTrajectory';
+import AreaAnalysis from './components/statistics/AreaAnalysis';
+import VenueAnalysis from './components/statistics/VenueAnalysis';
+import CaseAnalysis from './components/statistics/CaseAnalysis';
+import TargetPersonnelAnalysis from './components/statistics/TargetPersonnelAnalysis';
+import FugitiveStatistics from './components/statistics/FugitiveStatistics';
 import LevelAssessmentManagement from './components/LevelAssessmentManagement';
 import AssessmentStandardSettings from './components/AssessmentStandardSettings';
 import Announcements from './components/system/Announcements';
@@ -20,7 +26,7 @@ import UserManagement from './components/system/UserManagement';
 import RoleManagement from './components/system/RoleManagement';
 import PermissionManagement from './components/system/PermissionManagement';
 import SystemMonitor from './components/system/SystemMonitor';
-import DeclarationManagement from './components/DeclarationManagement';
+import RentalVehicleQuery from './components/RentalVehicleQuery';
 
 export type ThemeType = 'light' | 'dark' | 'theme';
 
@@ -63,23 +69,37 @@ export default function App() {
   const renderContent = (id: string) => {
     switch (id) {
       case '首页': return <Home onNavigate={openTab} />;
-      case '我的代办': return <DeclarationManagement initialTab="todo" />;
-      case '申报事项': return <DeclarationManagement initialTab="declaration" />;
-      case '办结事项': return <DeclarationManagement initialTab="done" />;
-      case '申报审核管理': return <DeclarationManagement initialTab="todo" />;
       case '备案信息': return <RecordInfoDisplay />;
       case '企业基础信息': return <EnterpriseManagement onNavigate={openTab} />;
-      case '从业人员信息': return <PersonnelManagement />;
-      case '行政检查': return <InspectionManagement initialView={navParams['行政检查']?.view} />;
-      case '案事件信息': return <CaseManagement initialView={navParams['案事件信息']?.view} />;
+      case '等级评定管理': return <LevelAssessmentManagement />;
+      case '从业人员信息查询': return <PersonnelManagement initialTab="info" />;
+      case '从业人员处罚管理': return <PersonnelManagement initialTab="punishment" />;
+      case '从业人员黑名单': return <PersonnelManagement initialTab="blacklist" />;
+      case '重点人员查询': return <PersonnelManagement initialTab="key_personnel" />;
+      case '检查记录查询': return <InspectionManagement initialTab="records" />;
+      case '问题整改跟踪': return <InspectionManagement initialTab="rectification" />;
+      case '违法违规信息': return <CaseManagement initialTab="violation" />;
+      case '企业处罚信息': return <CaseManagement initialTab="punishment" />;
       case '车辆信息管理': return <VehicleManagement />;
+      case '租赁车辆查询': return <RentalVehicleQuery />;
       case '企业发展趋势': return <div className="p-3 h-full overflow-auto"><EnterpriseTrendStatistics /></div>;
-      case '承修情况统计分析': return <RepairAnalysis />;
+      case '高频维修车辆统计分析': return <div className="p-3 h-full overflow-auto"><HighFrequencyRepair /></div>;
+      case '送取车人员统计分析': return <div className="p-3 h-full overflow-auto"><PersonnelAnalysis /></div>;
+      case '车辆维修轨迹分析': return <div className="p-3 h-full overflow-auto"><VehicleTrajectory /></div>;
       case '检查情况': return <div className="p-3 h-full overflow-auto"><InspectionStatistics /></div>;
-      case '涉案情况': return <div className="p-3 h-full overflow-auto"><CaseStatistics /></div>;
-      case '车辆维修记录': return <RepairRecordManagement />;
+      case '重点地区分析': return <div className="p-3 h-full overflow-auto"><AreaAnalysis /></div>;
+      case '重点企业分析': return <div className="p-3 h-full overflow-auto"><VenueAnalysis /></div>;
+      case '重点案件分析': return <div className="p-3 h-full overflow-auto"><CaseAnalysis /></div>;
+      case '重点人员分析': return <div className="p-3 h-full overflow-auto"><TargetPersonnelAnalysis /></div>;
+      case '在逃人员抓获统计': return <div className="p-3 h-full overflow-auto"><FugitiveStatistics /></div>;
       case '等级评定': return <LevelAssessmentManagement />;
-      case '评定标准设置': return <AssessmentStandardSettings />;
+      case '评价标准设置':
+      case '考核项目配置':
+        return <AssessmentStandardSettings initialTab="items" />;
+      case '等级阈值设置':
+        return <AssessmentStandardSettings initialTab="thresholds" />;
+      case '版本历史':
+        return <AssessmentStandardSettings initialTab="history" />;
       case '公告与消息': return <Announcements />;
       case '用户管理': return <UserManagement />;
       case '角色管理': return <RoleManagement />;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Printer, Download, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Printer, Download, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { api } from '../api';
+import DoubleCheckSupervision from './DoubleCheckSupervision';
 
 interface ViolationDetailProps {
   id: string;
@@ -25,6 +26,7 @@ export default function ViolationDetail({ id, onBack }: ViolationDetailProps) {
           caseNo: 'A20240410001',
           nature: '治安案件',
           category: result.type,
+          isInvestigated: '是',
           description: result.description
         });
       } catch (error) {
@@ -62,72 +64,77 @@ export default function ViolationDetail({ id, onBack }: ViolationDetailProps) {
   const data = caseData;
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between shrink-0 bg-gray-50/50">
-        <div className="flex items-center">
-          <h2 className="text-lg font-bold text-[#333333]">违法违规详情 <span className="text-sm font-normal text-gray-400 ml-2">#{id}</span></h2>
+    <div className="flex flex-col h-full bg-[#F5F5F5] overflow-hidden font-sans">
+      {/* 顶部标题与操作栏 */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-10">
+        <div className="flex items-center gap-4">
+           <h2 className="text-xl font-bold text-gray-800">违法违规详情</h2>
+           <span className="px-2 py-0.5 bg-red-50 text-[#fa5e45] border border-red-100 rounded text-xs">{data.nature}</span>
+           <span className="text-sm font-normal text-gray-400">#{id}</span>
         </div>
-        <div className="flex space-x-3">
-          <button className="px-4 py-2 border border-gray-300 text-gray-600 rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
+        <div className="flex gap-3">
+          <button className="px-4 py-2 bg-white border border-gray-300 text-gray-600 rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
             <Printer size={16} className="mr-2" /> 打印
           </button>
           <button className="px-4 py-2 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
             <Download size={16} className="mr-2" /> 导出PDF
           </button>
-          <button onClick={onBack} className="px-4 py-2 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
+          <button 
+            onClick={onBack}
+            className="px-4 py-2 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium"
+          >
             <ArrowLeft size={16} className="mr-1.5" /> 返回列表
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-3 custom-scrollbar">
-        <div className="w-full space-y-6">
-          <div className="bg-white border border-gray-200 rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] overflow-hidden">
-            <div className="bg-[#F8FAFC] px-6 py-3 border-b border-gray-200">
-              <h3 className="text-sm font-bold text-[#333333]">基本信息</h3>
-            </div>
-            <div className="p-6 grid grid-cols-2 gap-y-4 gap-x-12">
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">企业名称</span>
-                <span className="text-sm text-[#333333] font-medium">{data.companyName}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">违法违规人员(单位)</span>
-                <span className="text-sm text-[#333333] font-medium">{data.violator}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">证件号码</span>
-                <span className="text-sm text-[#333333] font-medium">{data.idCard}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">登记人员</span>
-                <span className="text-sm text-[#333333] font-medium">{data.registrar}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">发生时间</span>
-                <span className="text-sm text-[#333333] font-medium">{data.occurrenceTime}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">立案编号</span>
-                <span className="text-sm text-[#333333] font-medium">{data.caseNo}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">案件性质</span>
-                <span className="px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-600">{data.nature}</span>
-              </div>
-              <div>
-                <span className="text-sm text-[#999999] block mb-1">案件类别</span>
-                <span className="text-sm text-[#333333] font-medium">{data.category}</span>
-              </div>
-              <div className="col-span-2">
-                <span className="text-sm text-[#999999] block mb-1">情况描述</span>
-                <div className="text-sm text-[#666666] leading-relaxed bg-gray-50 p-4 rounded border border-gray-100">
+      <div className="flex-1 overflow-auto p-4 space-y-4 custom-scrollbar">
+        {/* 1. 基本信息 */}
+        <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="px-5 py-3 border-b border-gray-100 bg-[#e8f0fc] flex items-center">
+            <h3 className="text-sm font-bold text-[#333333] flex items-center gap-2">
+              <div className="w-1.5 h-4 bg-[#419EFF] rounded-full"></div>
+              违法违规基本信息
+            </h3>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6">
+              <ReadOnlyField label="案件名称/立案编号" value={data.caseNo} />
+              <ReadOnlyField label="企业名称" value={data.companyName} className="md:col-span-2" />
+              <ReadOnlyField label="违法违规人员(单位)" value={data.violator} />
+              <ReadOnlyField label="证件号码" value={data.idCard} />
+              <ReadOnlyField label="登记人员" value={data.registrar} />
+              <ReadOnlyField label="发生时间" value={data.occurrenceTime} />
+              <ReadOnlyField label="案件性质" value={data.nature} />
+              <ReadOnlyField label="案件类别" value={data.category} />
+              <ReadOnlyField label="是否查处" value={data.isInvestigated} />
+              
+              <div className="md:col-span-3">
+                <label className="text-sm font-medium text-gray-700 block mb-2">情况描述</label>
+                <div className="text-sm text-[#666666] leading-relaxed bg-gray-50 p-4 rounded border border-gray-200 min-h-[100px]">
                   {data.description}
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* 一案双查督办 - ReadOnly */}
+        <DoubleCheckSupervision defaultStarted={true} readOnly={true} />
+      </div>
+    </div>
+  );
+}
+
+function ReadOnlyField({ label, value, required, className = "" }: { label: string, value: string | number, required?: boolean, className?: string }) {
+  return (
+    <div className={`flex flex-col gap-2 ${className}`}>
+      <label className="text-sm font-medium text-gray-700 flex items-center">
+        {required && <span className="text-red-500 mr-1">*</span>}
+        {label}
+      </label>
+      <div className="h-9 px-3 flex items-center bg-gray-50 border border-gray-300 rounded text-sm text-gray-600 truncate border-solid">
+        {value || '-'}
       </div>
     </div>
   );

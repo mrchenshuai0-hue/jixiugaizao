@@ -54,44 +54,57 @@ export default function VehicleTrajectory() {
       </div>
       
       {/* 右侧车辆列表 */}
-      <div className="w-96 bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex flex-col z-10">
-        <div className="flex flex-col gap-2 mb-4">
-          <input type="text" placeholder="管辖单位" className="border border-gray-300 rounded px-2 py-1.5 text-sm" />
-          <input type="text" placeholder="车牌号" className="border border-gray-300 rounded px-2 py-1.5 text-sm" />
-          <input type="date" placeholder="送修时间" className="border border-gray-300 rounded px-2 py-1.5 text-sm" />
-          <button className="bg-[#419EFF] text-white px-3 py-1.5 rounded text-sm hover:bg-[#337FCC]">查询</button>
+      <div className="w-96 bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex flex-col z-10 shrink-0">
+        <div className="flex flex-col gap-3 mb-6">
+          <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2 mb-1">
+            <div className="w-1 h-4 bg-[#419EFF]"></div> 轨迹分析查询
+          </h3>
+          <div className="grid grid-cols-2 gap-2">
+            <input type="text" placeholder="车辆品牌" className="border border-gray-300 rounded px-2 py-1.5 text-xs focus:border-[#419EFF] outline-none" />
+            <select className="border border-gray-300 rounded px-2 py-1.5 text-xs focus:border-[#419EFF] outline-none bg-white">
+              <option value="">归属地</option>
+              <option value="本地">本地</option>
+              <option value="外地">外地</option>
+            </select>
+          </div>
+          <input type="text" placeholder="车牌号关键字" className="border border-gray-300 rounded px-2 py-1.5 text-xs focus:border-[#419EFF] outline-none" />
+          <div className="flex items-center gap-2">
+            <input type="date" className="flex-1 border border-gray-300 rounded px-2 py-1 text-xs" />
+            <span className="text-gray-400">-</span>
+            <input type="date" className="flex-1 border border-gray-300 rounded px-2 py-1 text-xs" />
+          </div>
+          <button className="bg-[#419EFF] text-white px-3 py-1.5 rounded text-xs hover:bg-[#337FCC] font-medium">查询轨迹</button>
         </div>
-        <table className="w-full text-sm text-left">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-              <th className="px-2 py-2">管辖单位</th>
-              <th className="px-2 py-2">车牌号</th>
-              <th className="px-2 py-2">送修时间</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-blue-50 border-b border-gray-200 cursor-pointer">
-              <td className="px-2 py-2">某区</td>
-              <td className="px-2 py-2">闽A88888</td>
-              <td className="px-2 py-2">2026-04-10</td>
-            </tr>
-            <tr className="bg-white border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
-              <td className="px-2 py-2">某区</td>
-              <td className="px-2 py-2">闽A88888</td>
-              <td className="px-2 py-2">2026-03-15</td>
-            </tr>
-            <tr className="bg-white border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
-              <td className="px-2 py-2">某区</td>
-              <td className="px-2 py-2">闽A88888</td>
-              <td className="px-2 py-2">2026-02-20</td>
-            </tr>
-            <tr className="bg-white border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
-              <td className="px-2 py-2">某区</td>
-              <td className="px-2 py-2">闽A88888</td>
-              <td className="px-2 py-2">2026-01-05</td>
-            </tr>
-          </tbody>
-        </table>
+        
+        <div className="flex-1 overflow-auto custom-scrollbar">
+          <table className="w-full text-sm text-left">
+            <thead className="text-[10px] text-gray-500 uppercase bg-gray-50 sticky top-0">
+              <tr>
+                <th className="px-2 py-2 font-medium">车牌号</th>
+                <th className="px-2 py-2 font-medium">品牌</th>
+                <th className="px-2 py-2 font-medium">归属</th>
+              </tr>
+            </thead>
+            <tbody className="text-xs">
+              {[
+                { lp: '京A88888', brand: '大众', origin: '本地', active: true },
+                { lp: '沪B66666', brand: '丰田', origin: '外地', active: false },
+                { lp: '浙C12345', brand: '别克', origin: '外地', active: false },
+                { lp: '苏D99999', brand: '本田', origin: '本地', active: false },
+              ].map((v, i) => (
+                <tr key={i} className={`${v.active ? 'bg-blue-50' : 'bg-white'} border-b border-gray-100 cursor-pointer hover:bg-gray-50`} onClick={() => setSelectedVehicle(v.lp)}>
+                  <td className="px-2 py-3 font-medium">{v.lp}</td>
+                  <td className="px-2 py-3 text-gray-600">{v.brand}</td>
+                  <td className="px-2 py-3">
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] ${v.origin === '本地' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600'}`}>
+                      {v.origin}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

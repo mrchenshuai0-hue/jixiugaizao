@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { Search, RotateCcw, Download, User, ShieldAlert } from 'lucide-react';
+import { Search, RotateCcw, Download, User, ShieldAlert, RefreshCw } from 'lucide-react';
 
 export default function KeyPersonnelSearch() {
   const [loading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [view, setView] = useState<'list' | 'detail'>('list');
+
+  const handleSync = () => {
+    setSyncing(true);
+    setTimeout(() => {
+      setSyncing(false);
+    }, 1500);
+  };
   const [selectedPerson, setSelectedPerson] = useState<any>(null);
   const [data] = useState([
     {
@@ -168,6 +176,46 @@ export default function KeyPersonnelSearch() {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
+              <Search size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">比对总次数</div>
+              <div className="text-xl font-bold text-gray-800">12,452</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
+              <ShieldAlert size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">重点人员检出</div>
+              <div className="text-xl font-bold text-gray-800">42</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-orange-50 rounded-full text-orange-500 mr-4">
+               <User size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">本月预警数</div>
+              <div className="text-xl font-bold text-gray-800">8</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
+              <Download size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">核查率</div>
+              <div className="text-xl font-bold text-gray-800">98.5%</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区 */}
           <div className="p-5 border-b border-gray-100">
@@ -238,6 +286,14 @@ export default function KeyPersonnelSearch() {
               共找到 <span className="text-red-500 font-medium">{data.length}</span> 条重点关注人员
             </div>
             <div className="flex space-x-2">
+              <button 
+                onClick={handleSync}
+                disabled={syncing}
+                className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium disabled:opacity-50"
+              >
+                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} />
+                {syncing ? '同步中...' : '同步数据'}
+              </button>
               <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
                 <Download size={14} className="mr-1.5" />
                 导出列表

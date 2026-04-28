@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCcw, Plus, Download, Eye, Edit, ChevronDown } from 'lucide-react';
+import { Search, RotateCcw, Plus, Download, Eye, Edit, ChevronDown, ShieldAlert, FileText, DollarSign, Ban } from 'lucide-react';
 import { api } from '../api';
 import { Case } from '../types';
+import DoubleCheckSupervision from './DoubleCheckSupervision';
 
 interface PunishmentListProps {
   onAdd: () => void;
@@ -13,6 +14,8 @@ export default function PunishmentList({ onAdd, onView, onEdit }: PunishmentList
   const [data, setData] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [showSupervision, setShowSupervision] = useState(false);
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +35,46 @@ export default function PunishmentList({ onAdd, onView, onEdit }: PunishmentList
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
+              <ShieldAlert size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">处罚记录总数</div>
+              <div className="text-xl font-bold text-gray-800">86</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-orange-50 rounded-full text-orange-500 mr-4">
+              <DollarSign size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">累计罚款金额</div>
+              <div className="text-xl font-bold text-gray-800">¥125,400</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-gray-50 rounded-full text-gray-500 mr-4">
+               <Ban size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">停业整顿企业</div>
+              <div className="text-xl font-bold text-gray-800">3</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
+              <FileText size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">本年处罚案件</div>
+              <div className="text-xl font-bold text-gray-800">12</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100">
@@ -126,15 +169,26 @@ export default function PunishmentList({ onAdd, onView, onEdit }: PunishmentList
                         </button>
                         <div className="relative">
                           <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                             onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
                           >
-                            更多 <ChevronDown size={14} className="ml-0.5" />
+                            <ChevronDown size={14} />
                           </button>
                           {openDropdown === row.id && (
                             <>
                               <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
+                              <div className="absolute right-0 mt-1 w-40 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
+                                <button 
+                                  onClick={(e) => { 
+                                    e.stopPropagation(); 
+                                    setOpenDropdown(null); 
+                                    setShowSupervision(true); 
+                                    setSelectedRowId(row.id);
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-[#333333] hover:bg-blue-50 hover:text-[#419EFF] transition-colors"
+                                >
+                                  {row.id === '2' ? '督办记录' : '发起督办'}
+                                </button>
                                 <button className="w-full text-left px-4 py-2 text-sm text-[#333333] hover:bg-blue-50 hover:text-[#419EFF]">
                                   删除
                                 </button>
@@ -163,6 +217,15 @@ export default function PunishmentList({ onAdd, onView, onEdit }: PunishmentList
           </div>
         </div>
       </div>
+      {/* 一案双查督办弹窗 */}
+      {showSupervision && (
+        <DoubleCheckSupervision 
+          isModal 
+          onClose={() => setShowSupervision(false)} 
+          defaultStarted={selectedRowId === '2'} 
+          initMode={selectedRowId !== '2'}
+        />
+      )}
     </div>
   );
 }

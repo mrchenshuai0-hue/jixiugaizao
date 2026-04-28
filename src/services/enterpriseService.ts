@@ -1,11 +1,11 @@
 import { Enterprise } from '../types';
 
 const mockEnterprises: Enterprise[] = [
-  { id: '1', name: '福州市鼓楼区安达汽车维修服务部', uscc: '91350102MA34567890', category: '二类维修', region: '福州市鼓楼区', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-10-15)', legalRep: '张安达', legalRepPhone: '13811112222' },
-  { id: '2', name: '台江区顺风机动车修配厂', uscc: '91350103MA12345678', category: '三类维修', region: '福州市台江区', recordStatus: '未备案', status: '正常营业', lastCheck: '未检查', legalRep: '王顺风', legalRepPhone: '13933334444' },
-  { id: '3', name: '仓山区捷豹汽车服务有限公司', uscc: '91350104MA87654321', category: '一类维修', region: '福州市仓山区', recordStatus: '备案过期', status: '歇业', lastCheck: '不合格 (2023-09-20)', legalRep: '林捷豹', legalRepPhone: '13755556666' },
-  { id: '4', name: '晋安区通达汽修厂', uscc: '91350105MA23456789', category: '二类维修', region: '福州市晋安区', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-11-02)', legalRep: '陈通达', legalRepPhone: '13677778888' },
-  { id: '5', name: '马尾区远航汽车维修中心', uscc: '91350105MA23456789', category: '摩托车维修', region: '福州市马尾区', recordStatus: '待审核', status: '正常营业', lastCheck: '合格 (2023-11-05)', legalRep: '郑远航', legalRepPhone: '13599990000' },
+  { id: '1', name: '福州市鼓楼区安达汽车维修服务部', uscc: '91350102MA34567890', enterpriseCode: 'E350102001', category: '二类维修', region: '福州市鼓楼区', jurisdiction: '福州市鼓楼区公安分局', riskCreditLevel: 'A级', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-10-15)', legalRep: '张安达', legalRepPhone: '13811112222', registerDate: '2020-01-10', employeeCount: 15, inspectionCount: 8, address: '鼓楼区软件园F区' },
+  { id: '2', name: '台江区顺风机动车修配厂', uscc: '91350103MA12345678', enterpriseCode: 'E350103002', category: '三类维修', region: '福州市台江区', jurisdiction: '福州市台江区公安分局', riskCreditLevel: 'B级', recordStatus: '未备案', status: '正常营业', lastCheck: '未检查', legalRep: '王顺风', legalRepPhone: '13933334444', registerDate: '2021-05-20', employeeCount: 8, inspectionCount: 2, address: '台江区鳌峰路12号' },
+  { id: '3', name: '仓山区捷豹汽车服务有限公司', uscc: '91350104MA87654321', enterpriseCode: 'E350104003', category: '一类维修', region: '福州市仓山区', jurisdiction: '福州市仓山区公安分局', riskCreditLevel: 'AA级', recordStatus: '备案过期', status: '歇业', lastCheck: '不合格 (2023-09-20)', legalRep: '林捷豹', legalRepPhone: '13755556666', registerDate: '2019-11-01', employeeCount: 45, inspectionCount: 12, address: '仓山区首山路8号' },
+  { id: '4', name: '晋安区通达汽修厂', uscc: '91350105MA23456789', enterpriseCode: 'E350105004', category: '二类维修', region: '福州市晋安区', jurisdiction: '福州市晋安区公安分局', riskCreditLevel: 'B级', recordStatus: '已备案', status: '正常营业', lastCheck: '合格 (2023-11-02)', legalRep: '陈通达', legalRepPhone: '13677778888', registerDate: '2022-03-15', employeeCount: 12, inspectionCount: 5, address: '晋安区福马路100号' },
+  { id: '5', name: '马尾区远航汽车维修中心', uscc: '91350105MA23456789', enterpriseCode: 'E350105005', category: '摩托车维修', region: '福州市马尾区', jurisdiction: '福州市马尾区公安分局', riskCreditLevel: 'A级', recordStatus: '待审核', status: '正常营业', lastCheck: '合格 (2023-11-05)', legalRep: '郑远航', legalRepPhone: '13599990000', registerDate: '2023-01-20', employeeCount: 5, inspectionCount: 3, address: '马尾区江滨路' },
 ];
 
 export const enterpriseService = {
@@ -61,6 +61,12 @@ export const enterpriseService = {
         dataCollection: '是',
         videoDevice: '是',
         fireDevice: '是',
+        riskCreditLevel: 'A级',
+        licenseAuthority: '福州市市场监督管理局',
+        taxRegNo: '91350102MA34567890',
+        taxRegAuthority: '福州市鼓楼区税务局',
+        enterprisePoints: 100,
+        industryLicenseAuthority: '福州市交通运输局',
         registrationDate: '2023-10-15',
         adminManager: '陈警官',
         adminManagerPhone: '13600136000',

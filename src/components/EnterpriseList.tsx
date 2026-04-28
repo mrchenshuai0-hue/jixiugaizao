@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCcw, Plus, Download, ChevronDown, Eye, ShieldCheck, Key, Settings, AlertCircle, Clock, ShieldAlert, XCircle } from 'lucide-react';
+import { Search, RotateCcw, Plus, Download, ChevronDown, Eye, ShieldCheck, Key, Settings, AlertCircle, Clock, ShieldAlert, XCircle, Building2, Star, AlertTriangle } from 'lucide-react';
 import { api } from '../api';
 import { Enterprise } from '../types';
 
@@ -52,6 +52,46 @@ export default function EnterpriseList({ onViewDetail, onAdd, onEdit }: Enterpri
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5] relative">
       <div className="flex-1 p-3 overflow-auto custom-scrollbar">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
+              <Building2 size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">场所总数</div>
+              <div className="text-xl font-bold text-gray-800">1,284</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
+              <Plus size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">本月新增</div>
+              <div className="text-xl font-bold text-gray-800">12</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
+               <Star size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">AAA级占比</div>
+              <div className="text-xl font-bold text-gray-800">18.5%</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
+              <AlertTriangle size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">风险隐患企业</div>
+              <div className="text-xl font-bold text-gray-800">5</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           
           {/* 查询区 (按新要求调整栏位) */}
@@ -158,19 +198,32 @@ export default function EnterpriseList({ onViewDetail, onAdd, onEdit }: Enterpri
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
                 <tr className="bg-gray-50 text-[#333333] text-sm border-b border-gray-200">
-                  <th className="px-4 py-3 w-12 text-center text-gray-400">#</th>
-                  <th className="px-4 py-3 font-medium">企业名称</th>
-                  <th className="px-4 py-3 font-medium">统一社会信用代码</th>
-                  <th className="px-4 py-3 font-medium text-center">等级</th>
-                  <th className="px-4 py-3 font-medium">企业类别</th>
-                  <th className="px-4 py-3 font-medium">法定代表人</th>
-                  <th className="px-4 py-3 font-medium">联系电话</th>
+                  <th className="px-4 py-3 w-12 text-center text-gray-400 font-medium">#</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">公司名称</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业编码</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业状态</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">风险加信用等级</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业所属辖区</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">注册地址</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">标准地址</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">招牌名</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业类别</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">所属派出所</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap text-center">企业等级</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业法人</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">法人代表电话</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">登记日期</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">最后登录时间</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">最后上传时间</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业人数</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">最后检查日期</th>
+                  <th className="px-4 py-3 font-medium whitespace-nowrap">检查次数</th>
                   <th className="px-4 py-3 font-medium text-center w-32 sticky right-0 bg-gray-50 shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.05)]">操作</th>
                 </tr>
               </thead>
               <tbody className="text-sm text-[#666666]">
                 {loading ? (
-                  <tr><td colSpan={8} className="px-4 py-10 text-center text-gray-500">加载中...</td></tr>
+                  <tr><td colSpan={22} className="px-4 py-10 text-center text-gray-500">加载中...</td></tr>
                 ) : data.map((row, index) => (
                   <tr 
                     key={row.id} 
@@ -178,22 +231,39 @@ export default function EnterpriseList({ onViewDetail, onAdd, onEdit }: Enterpri
                     onClick={() => onViewDetail(row.id)}
                   >
                     <td className="px-4 py-3 text-center text-gray-400">{index + 1}</td>
-                    <td className="px-4 py-3 font-medium text-[#333333]">{row.name}</td>
-                    <td className="px-4 py-3 font-mono">{row.uscc}</td>
-                    <td className="px-4 py-3 text-center">{row.level || 'AA'}</td>
-                    <td className="px-4 py-3">{row.category}</td>
-                    <td className="px-4 py-3">{row.legalRep}</td>
-                    <td className="px-4 py-3 font-mono text-gray-500">{row.legalRepPhone || '139****1234'}</td>
+                    <td className="px-4 py-3 font-medium text-[#333333] whitespace-nowrap">{row.name}</td>
+                    <td className="px-4 py-3 font-mono whitespace-nowrap">{row.enterpriseCode || 'E' + row.id.substring(0, 8)}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className={`px-2 py-0.5 rounded text-[10px] ${row.status === '正常' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {row.status || '正常营业'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.riskCreditLevel || 'B级'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.jurisdiction || row.region}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.registeredAddress || '福建省福州市...'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.address || '福州市鼓楼区...'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.brandName || '--'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.category}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.policeStation || '某某派出所'}</td>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">{row.level || 'AA'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.legalRep}</td>
+                    <td className="px-4 py-3 font-mono text-gray-500 whitespace-nowrap">{row.legalRepPhone || '139****1234'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.registerDate || '2020-01-01'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.lastLoginTime || '2026-04-20 10:00'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.lastUploadTime || '2026-04-21 15:30'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.employeeCount || 10}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.lastCheck}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{row.inspectionCount || 5}</td>
                     <td className={`px-4 py-3 text-center sticky right-0 bg-white group-hover:bg-[#f3f7ff] transition-colors ${openDropdown === row.id ? 'z-50' : 'z-10'}`}>
                       <div className="flex items-center justify-center gap-4">
                         <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium whitespace-nowrap"
+                          className="text-[#419EFF] hover:text-blue-700 font-medium whitespace-nowrap text-xs"
                           onClick={(e) => { e.stopPropagation(); onViewDetail(row.id); }}
                         >
                           详情
                         </button>
                         <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium whitespace-nowrap"
+                          className="text-[#419EFF] hover:text-blue-700 font-medium whitespace-nowrap text-xs"
                           onClick={(e) => { e.stopPropagation(); onEdit(row.id); }}
                         >
                           修改
@@ -208,17 +278,27 @@ export default function EnterpriseList({ onViewDetail, onAdd, onEdit }: Enterpri
                           {openDropdown === row.id && (
                             <>
                               <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-40 bg-white border border-gray-200 rounded shadow-lg z-[60] py-1 flex flex-col items-start overflow-hidden">
+                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-[60] py-1 flex flex-col items-start overflow-hidden">
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); handleAction('password' as any, row); }}
-                                  className="w-full flex items-center px-4 py-1.5 text-xs text-gray-700 hover:bg-blue-50 hover:text-[#419EFF] transition-colors"
+                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-gray-700 hover:bg-blue-50 hover:text-[#419EFF] transition-colors"
                                 >
                                   <Key size={12} className="mr-2" /> 密码重置
                                 </button>
                                 <button 
-                                  className="w-full flex items-center px-4 py-1.5 text-xs text-red-500 hover:bg-red-50 transition-colors"
+                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-orange-500 hover:bg-orange-50 transition-colors"
                                 >
-                                  <XCircle size={12} className="mr-2" /> 注销企业
+                                  <Clock size={12} className="mr-2" /> 停业
+                                </button>
+                                <button 
+                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-red-500 hover:bg-red-50 transition-colors"
+                                >
+                                  <XCircle size={12} className="mr-2" /> 注销
+                                </button>
+                                <button 
+                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-gray-500 hover:bg-gray-100 transition-colors"
+                                >
+                                  <AlertCircle size={12} className="mr-2" /> 歇业
                                 </button>
                               </div>
                             </>

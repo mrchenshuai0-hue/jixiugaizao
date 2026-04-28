@@ -62,10 +62,10 @@ export default function UserManagement() {
                       </button>
                       <div className="relative">
                         <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                           onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === user.id ? null : user.id); }}
                         >
-                          更多 <ChevronDown size={14} className="ml-0.5" />
+                          <ChevronDown size={14} />
                         </button>
                         {openDropdown === user.id && (
                           <>

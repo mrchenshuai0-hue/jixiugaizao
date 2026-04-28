@@ -3,10 +3,11 @@ import { Search, X, Save, FileText, Camera, ArrowLeft } from 'lucide-react';
 
 interface InspectionFormProps {
   onCancel: () => void;
-  onSave: () => void;
+  onSave?: () => void;
+  isReadOnly?: boolean;
 }
 
-export default function InspectionForm({ onCancel, onSave }: InspectionFormProps) {
+export default function InspectionForm({ onCancel, onSave, isReadOnly = false }: InspectionFormProps) {
   const [inspectionDate, setInspectionDate] = useState(new Date().toISOString().split('T')[0]);
   const [inspectionMethod, setInspectionMethod] = useState('例查');
   const [inspectionSituation, setInspectionSituation] = useState('正常');
@@ -39,7 +40,9 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
       <div className="flex-1 overflow-auto p-3 custom-scrollbar pb-20">
         <div className="w-full bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100 bg-[#F8FAFC] flex justify-between items-center">
-            <h2 className="text-base font-bold text-[#333333] border-l-4 border-[#419EFF] pl-3">行政检查登记</h2>
+            <h2 className="text-base font-bold text-[#333333] border-l-4 border-[#419EFF] pl-3">
+              {isReadOnly ? '行政检查详情' : '行政检查登记'}
+            </h2>
             <button onClick={onCancel} className="px-4 py-2 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
               <ArrowLeft size={16} className="mr-1.5" /> 返回列表
             </button>
@@ -53,11 +56,19 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                   <label className="w-24 text-sm text-[#333333]"><span className="text-[#fa5e45] mr-1">*</span>公司名称：</label>
                   <div className="flex-1 flex items-center">
                     <div className="relative flex-1">
-                      <input type="text" className="w-full h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm" placeholder="请选择公司" />
-                      <div className="absolute right-2 top-1.5 flex space-x-1">
-                        <X size={14} className="text-red-400 cursor-pointer" />
-                        <Search size={14} className="text-[#419EFF] cursor-pointer" />
-                      </div>
+                      <input 
+                        type="text" 
+                        disabled={isReadOnly}
+                        className="w-full h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm disabled:bg-gray-50 disabled:border-gray-200" 
+                        placeholder="请选择公司" 
+                        defaultValue={isReadOnly ? '新锦江大酒店' : ''}
+                      />
+                      {!isReadOnly && (
+                        <div className="absolute right-2 top-1.5 flex space-x-1">
+                          <X size={14} className="text-red-400 cursor-pointer" />
+                          <Search size={14} className="text-[#419EFF] cursor-pointer" />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -65,8 +76,14 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                 <div className="flex items-center">
                   <label className="w-24 text-sm text-[#333333]"><span className="text-[#fa5e45] mr-1">*</span>检查人员：</label>
                   <div className="flex-1 relative">
-                    <input type="text" className="w-full h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm" placeholder="请选择检查人员" />
-                    <Search size={14} className="absolute right-2 top-2 text-[#419EFF] cursor-pointer" />
+                    <input 
+                      type="text" 
+                      disabled={isReadOnly}
+                      className="w-full h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm disabled:bg-gray-50 disabled:border-gray-200" 
+                      placeholder="请选择检查人员" 
+                      defaultValue={isReadOnly ? '张警官' : ''}
+                    />
+                    {!isReadOnly && <Search size={14} className="absolute right-2 top-2 text-[#419EFF] cursor-pointer" />}
                   </div>
                 </div>
 
@@ -75,14 +92,20 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                   <input 
                     type="date" 
                     value={inspectionDate}
+                    disabled={isReadOnly}
                     onChange={(e) => setInspectionDate(e.target.value)}
-                    className="flex-1 h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm" 
+                    className="flex-1 h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm disabled:bg-gray-50 disabled:border-gray-200" 
                   />
                 </div>
 
                 <div className="flex items-center">
                   <label className="w-24 text-sm text-[#333333]"><span className="text-[#fa5e45] mr-1">*</span>检查单位：</label>
-                  <input type="text" className="flex-1 h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm" defaultValue="福州市公安局鼓楼分局" />
+                  <input 
+                    type="text" 
+                    disabled={isReadOnly}
+                    className="flex-1 h-8 px-3 border border-red-200 bg-red-50/30 rounded focus:outline-none focus:border-[#419EFF] text-sm disabled:bg-gray-50 disabled:border-gray-200" 
+                    defaultValue="福州市公安局鼓楼分局" 
+                  />
                 </div>
 
                 <div className="flex items-center">
@@ -93,6 +116,7 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                         <input 
                           type="radio" 
                           name="method" 
+                          disabled={isReadOnly}
                           checked={inspectionMethod === method}
                           onChange={() => setInspectionMethod(method)}
                           className="mr-1.5 text-[#419EFF]" 
@@ -110,6 +134,7 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                       <input 
                         type="radio" 
                         name="situation" 
+                        disabled={isReadOnly}
                         checked={inspectionSituation === '发现问题'}
                         onChange={() => setInspectionSituation('发现问题')}
                         className="mr-1.5 text-[#419EFF]" 
@@ -120,6 +145,7 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                       <input 
                         type="radio" 
                         name="situation" 
+                        disabled={isReadOnly}
                         checked={inspectionSituation === '正常'}
                         onChange={() => setInspectionSituation('正常')}
                         className="mr-1.5 text-[#419EFF]" 
@@ -137,6 +163,7 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                   <label className="flex items-center cursor-pointer">
                     <input 
                       type="checkbox" 
+                      disabled={isReadOnly}
                       checked={isDeduction}
                       onChange={(e) => setIsDeduction(e.target.checked)}
                       className="mr-1.5 text-[#419EFF]" 
@@ -148,10 +175,12 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                 <div className="flex items-start">
                   <label className="w-24 text-sm text-[#333333] pt-1">检查照片：</label>
                   <div className="flex-1">
-                    <div className="flex items-center space-x-4 mb-3">
-                      <button className="h-8 px-4 bg-white border border-gray-300 text-xs text-[#333333] rounded hover:bg-gray-50 flex items-center">选择文件</button>
-                      <span className="text-xs text-[#999999]">未选择任何文件</span>
-                    </div>
+                    {!isReadOnly && (
+                      <div className="flex items-center space-x-4 mb-3">
+                        <button className="h-8 px-4 bg-white border border-gray-300 text-xs text-[#333333] rounded hover:bg-gray-50 flex items-center">选择文件</button>
+                        <span className="text-xs text-[#999999]">未选择任何文件</span>
+                      </div>
+                    )}
                     <div className="w-40 h-40 bg-gray-50 border border-gray-200 rounded flex flex-col items-center justify-center text-[#999999]">
                       <Camera size={48} className="mb-2 opacity-20" />
                       <span className="text-2xl font-bold opacity-20">图 片</span>
@@ -162,7 +191,11 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
 
                 <div className="flex items-start">
                   <label className="w-24 text-sm text-[#333333] pt-1">备注描述：</label>
-                  <textarea className="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] text-sm" rows={3}></textarea>
+                  <textarea 
+                    disabled={isReadOnly}
+                    className="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] text-sm disabled:bg-gray-50 disabled:border-gray-200" 
+                    rows={3}
+                  ></textarea>
                 </div>
               </div>
 
@@ -186,9 +219,10 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
                         <td className="border border-gray-200 px-4 py-2 text-center">
                           <input 
                             type="checkbox" 
+                            disabled={isReadOnly}
                             checked={violations.includes(item.id)}
                             onChange={() => toggleViolation(item.id)}
-                            className="w-4 h-4 text-[#419EFF] rounded border-gray-300 focus:ring-[#419EFF]" 
+                            className="w-4 h-4 text-[#419EFF] rounded border-gray-300 focus:ring-[#419EFF] disabled:opacity-50" 
                           />
                         </td>
                       </tr>
@@ -203,10 +237,14 @@ export default function InspectionForm({ onCancel, onSave }: InspectionFormProps
 
       <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end shadow-sm z-20">
         <div className="flex space-x-3">
-          <button onClick={onCancel} className="px-6 py-2 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors text-sm font-medium">取消</button>
-          <button onClick={onSave} className="px-6 py-2 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
-            <Save size={16} className="mr-1.5" /> 保存
+          <button onClick={onCancel} className="px-6 py-2 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors text-sm font-medium">
+            {isReadOnly ? '关闭' : '取消'}
           </button>
+          {!isReadOnly && onSave && (
+            <button onClick={onSave} className="px-6 py-2 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
+              <Save size={16} className="mr-1.5" /> 保存
+            </button>
+          )}
         </div>
       </div>
     </div>

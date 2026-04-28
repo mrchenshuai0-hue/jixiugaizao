@@ -12,19 +12,19 @@ type ViewState = 'list' | 'form' | 'detail';
 
 interface CaseManagementProps {
   initialView?: ViewState;
+  initialTab?: TabType;
 }
 
-export default function CaseManagement({ initialView = 'list' }: CaseManagementProps = {}) {
-  const [activeTab, setActiveTab] = useState<TabType>('violation');
+export default function CaseManagement({ initialView = 'list', initialTab = 'violation' }: CaseManagementProps = {}) {
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [viewState, setViewState] = useState<ViewState>(initialView);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // Update view if initialView changes
+  // Update view and tab if props change
   useEffect(() => {
-    if (initialView) {
-      setViewState(initialView);
-    }
-  }, [initialView]);
+    if (initialView) setViewState(initialView);
+    if (initialTab) setActiveTab(initialTab);
+  }, [initialView, initialTab]);
 
   const handleAdd = () => setViewState('form');
   const handleView = (id: string) => {
@@ -47,43 +47,18 @@ export default function CaseManagement({ initialView = 'list' }: CaseManagementP
   return (
     <div className="h-full w-full flex flex-col bg-[#F5F5F5] overflow-hidden">
       <div className="flex-1 flex flex-col overflow-hidden">
-        {viewState === 'list' && (
-          <div className="px-3 pt-3 shrink-0">
-            <div className="bg-white rounded-t-lg border-x border-t border-gray-200 px-4 flex space-x-6">
-              <button
-                onClick={() => setActiveTab('violation')}
-                className={`h-10 px-1 text-sm font-medium border-b-2 transition-colors flex items-center ${
-                  activeTab === 'violation' ? 'border-[#419EFF] text-[#419EFF]' : 'border-transparent text-[#666666] hover:text-[#333333]'
-                }`}
-              >
-                <FileWarning size={16} className="mr-2" />
-                违法违规信息
-              </button>
-              <button
-                onClick={() => setActiveTab('punishment')}
-                className={`h-10 px-1 text-sm font-medium border-b-2 transition-colors flex items-center ${
-                  activeTab === 'punishment' ? 'border-[#419EFF] text-[#419EFF]' : 'border-transparent text-[#666666] hover:text-[#333333]'
-                }`}
-              >
-                <ShieldAlert size={16} className="mr-2" />
-                企业处罚信息
-              </button>
-            </div>
-          </div>
-        )}
-
         <div className="flex-1 overflow-hidden">
           {activeTab === 'violation' && (
             <>
               {viewState === 'list' && <ViolationList onAdd={handleAdd} onView={handleView} onEdit={handleEdit} />}
-              {viewState === 'form' && <CaseViolationForm onCancel={handleBack} onSave={handleSave} />}
+              {viewState === 'form' && <CaseViolationForm onCancel={handleBack} onSave={handleSave} id={selectedId || undefined} />}
               {viewState === 'detail' && <ViolationDetail id={selectedId || ''} onBack={handleBack} />}
             </>
           )}
           {activeTab === 'punishment' && (
             <>
               {viewState === 'list' && <PunishmentList onAdd={handleAdd} onView={handleView} onEdit={handleEdit} />}
-              {viewState === 'form' && <CasePunishmentForm onCancel={handleBack} onSave={handleSave} />}
+              {viewState === 'form' && <CasePunishmentForm onCancel={handleBack} onSave={handleSave} id={selectedId || undefined} />}
               {viewState === 'detail' && <PunishmentDetail id={selectedId || ''} onBack={handleBack} />}
             </>
           )}

@@ -26,6 +26,19 @@ export interface Enterprise {
   registeredCapital?: string;
   area?: string;
   postalCode?: string;
+  enterpriseCode?: string;
+  riskCreditLevel?: string;
+  policeStation?: string;
+  registerDate?: string;
+  lastLoginTime?: string;
+  lastUploadTime?: string;
+  employeeCount?: number;
+  inspectionCount?: number;
+  licenseAuthority?: string;
+  taxRegNo?: string;
+  taxRegAuthority?: string;
+  enterprisePoints?: number;
+  industryLicenseAuthority?: string;
 }
 
 export interface Personnel {

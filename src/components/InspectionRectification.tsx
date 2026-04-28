@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCcw, CheckCircle, AlertCircle, Clock } from 'lucide-react';
+import { Search, RotateCcw, CheckCircle, AlertCircle, Clock, RefreshCw } from 'lucide-react';
 import { api } from '../api';
 import { Inspection } from '../types';
 
 export default function InspectionRectification() {
   const [data, setData] = useState<Inspection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
 
   const [showDetail, setShowDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Inspection | null>(null);
+
+  const handleSync = () => {
+    setSyncing(true);
+    setTimeout(() => {
+      setSyncing(false);
+    }, 1500);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const result = await api.inspection.getAll();
-        setData(result.map(item => ({
+        setData(result.map((item, index) => ({
           ...item,
           enterprise: item.company || '某企业',
           inspector: item.inspectors || '张警官',
           result: item.situation === '正常' ? '合格' : '不合格',
-          rectificationStatus: item.situation === '正常' ? '已完成' : '待整改',
+          rectificationStatus: index % 3 === 0 ? '已整改' : index % 3 === 1 ? '待整改' : '待回访',
           rectificationDeadline: '2024-05-10',
           rectificationPlan: '拟对员工进行治安管理条例专项培训，完善进店登记制度。'
         })));
@@ -41,6 +49,46 @@ export default function InspectionRectification() {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
+        {/* 统计卡片 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 mr-3">
+              <Clock size={20} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500">待整改</div>
+              <div className="text-lg font-bold text-orange-600">5 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 mr-3">
+              <RotateCcw size={20} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500">待回访</div>
+              <div className="text-lg font-bold text-blue-600">3 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500 mr-3">
+              <CheckCircle size={20} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500">已整改</div>
+              <div className="text-lg font-bold text-green-600">12 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500 mr-3">
+              <AlertCircle size={20} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500">逾期未整改</div>
+              <div className="text-lg font-bold text-red-600">2 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100">
@@ -55,6 +103,7 @@ export default function InspectionRectification() {
                   <option value="">全部</option>
                   <option value="待整改">待整改</option>
                   <option value="已整改">已整改</option>
+                  <option value="待回访">待回访</option>
                   <option value="逾期未整改">逾期未整改</option>
                 </select>
               </div>
@@ -69,34 +118,19 @@ export default function InspectionRectification() {
             </div>
           </div>
 
-          {/* 统计卡片 */}
-          <div className="px-5 py-4 grid grid-cols-3 gap-4 bg-gray-50/30 border-b border-gray-100">
-            <div className="bg-white p-4 rounded border border-orange-100 flex items-center shadow-[0_0_10px_0_rgba(0,0,0,0.1)]">
-              <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 mr-3">
-                <Clock size={20} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">待整改问题</div>
-                <div className="text-xl font-bold text-orange-600">5 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
-              </div>
+          {/* 状态统计与操作 */}
+          <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div className="text-sm text-[#666666]">
+              整改跟踪共 <span className="text-[#419EFF] font-bold">{data.length}</span> 项
             </div>
-            <div className="bg-white p-4 rounded border border-green-100 flex items-center shadow-[0_0_10px_0_rgba(0,0,0,0.1)]">
-              <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500 mr-3">
-                <CheckCircle size={20} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">本月已整改</div>
-                <div className="text-xl font-bold text-green-600">12 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded border border-red-100 flex items-center shadow-[0_0_10px_0_rgba(0,0,0,0.1)]">
-              <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500 mr-3">
-                <AlertCircle size={20} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">逾期未整改</div>
-                <div className="text-xl font-bold text-red-600">2 <span className="text-xs font-normal text-gray-400 ml-1">项</span></div>
-              </div>
+            <div className="flex space-x-2">
+              <button 
+                onClick={handleSync}
+                disabled={syncing}
+                className="h-8 px-4 bg-white border border-[#419EFF] text-[#419EFF] rounded hover:bg-blue-50 transition-colors flex items-center text-xs font-medium disabled:opacity-50"
+              >
+                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? '同步中...' : '同步数据'}
+              </button>
             </div>
           </div>
 
@@ -137,7 +171,12 @@ export default function InspectionRectification() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded text-xs ${row.rectificationStatus === '已完成' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}`}>
+                      <span className={`px-2 py-0.5 rounded text-xs ${
+                        row.rectificationStatus === '已整改' ? 'bg-green-100 text-green-600' : 
+                        row.rectificationStatus === '待整改' ? 'bg-orange-100 text-orange-600' : 
+                        row.rectificationStatus === '待回访' ? 'bg-blue-100 text-blue-600' :
+                        'bg-red-100 text-red-600'
+                      }`}>
                         {row.rectificationStatus}
                       </span>
                     </td>

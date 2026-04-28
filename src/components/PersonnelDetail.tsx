@@ -163,48 +163,6 @@ export default function PersonnelDetail({ id, onBack }: PersonnelDetailProps) {
           </div>
         </section>
 
-        {/* 4. 奖惩记录 */}
-        <section className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="px-5 py-3 border-b border-gray-100 bg-[#e8f0fc] flex items-center">
-            <h3 className="text-sm font-bold text-[#333333] flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-[#419EFF] rounded-full"></div>
-              奖惩记录
-            </h3>
-          </div>
-          <div className="overflow-hidden">
-            <table className="w-full text-xs text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-50 text-gray-500 font-medium border-b border-gray-100 uppercase">
-                  <th className="px-6 py-3">日期</th>
-                  <th className="px-6 py-3">类型</th>
-                  <th className="px-6 py-3">奖惩名称</th>
-                  <th className="px-6 py-3">原因</th>
-                  <th className="px-6 py-3 text-center">执行单位</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                <tr className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 text-gray-400 font-mono">2026-03-15</td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-50 text-green-600 border border-green-100">奖励</span>
-                  </td>
-                  <td className="px-6 py-4 font-bold text-gray-700">优秀员工</td>
-                  <td className="px-6 py-4 text-gray-500">工作表现突出</td>
-                  <td className="px-6 py-4 text-center text-gray-600">某区运输管理处</td>
-                </tr>
-                <tr className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 text-gray-400 font-mono">2025-12-01</td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-red-50 text-red-600 border border-red-100">处罚</span>
-                  </td>
-                  <td className="px-6 py-4 font-bold text-red-600 font-medium">违规操作警告</td>
-                  <td className="px-6 py-4 text-gray-500">未按规定佩戴安全装备</td>
-                  <td className="px-6 py-4 text-center text-gray-600">某区运输管理处</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
       </div>
     </div>
   );

@@ -39,16 +39,6 @@ const initialMenuData = [
     children: []
   },
   {
-    id: '申报审核管理',
-    title: '申报审核管理',
-    icon: <ClipboardCheck size={20} />,
-    children: [
-      { title: '我的代办' },
-      { title: '申报事项' },
-      { title: '办结事项' }
-    ]
-  },
-  {
     id: '机修业管理',
     title: '机修业管理',
     icon: <Wrench size={20} />,
@@ -56,9 +46,29 @@ const initialMenuData = [
     children: [
       { title: '备案信息' },
       { title: '企业基础信息' },
-      { title: '从业人员信息' },
-      { title: '行政检查' },
-      { title: '案事件信息' }
+      { 
+        title: '从业人员信息',
+        children: [
+          { title: '从业人员信息查询' },
+          { title: '从业人员处罚管理' },
+          { title: '从业人员黑名单' },
+          { title: '重点人员查询' }
+        ]
+      },
+      { 
+        title: '行政检查',
+        children: [
+          { title: '检查记录查询' },
+          { title: '问题整改跟踪' }
+        ]
+      },
+      { 
+        title: '案事件信息',
+        children: [
+          { title: '违法违规信息' },
+          { title: '企业处罚信息' }
+        ]
+      }
     ]
   },
   {
@@ -67,7 +77,7 @@ const initialMenuData = [
     icon: <Car size={20} />,
     children: [
       { title: '车辆信息管理' },
-      { title: '车辆维修记录' }
+      { title: '租赁车辆查询' }
     ]
   },
   {
@@ -76,9 +86,24 @@ const initialMenuData = [
     icon: <BarChart2 size={20} />,
     children: [
       { title: '企业发展趋势' },
-      { title: '承修情况统计分析' },
+      { 
+        title: '承修情况统计分析',
+        children: [
+          { title: '高频维修车辆统计分析' },
+          { title: '送取车人员统计分析' },
+          { title: '车辆维修轨迹分析' }
+        ]
+      },
       { title: '检查情况' },
-      { title: '涉案情况' },
+      { 
+        title: '涉案情况',
+        children: [
+          { title: '重点地区分析' },
+          { title: '重点企业分析' },
+          { title: '重点案件分析' },
+          { title: '重点人员分析' }
+        ]
+      },
       { title: '在逃人员抓获统计' }
     ]
   },
@@ -87,8 +112,15 @@ const initialMenuData = [
     title: '分级管理',
     icon: <Layers size={20} />,
     children: [
-      { title: '等级评定' },
-      { title: '评定标准设置' }
+      { title: '等级评定管理' },
+      { 
+        title: '评价标准设置',
+        children: [
+          { title: '考核项目配置' },
+          { title: '等级阈值设置' },
+          { title: '版本历史' }
+        ]
+      }
     ]
   },
   {
@@ -169,19 +201,58 @@ function SortableMenuItem({ menu, expandedMenus, toggleMenu, activeMenu, setActi
       {menu.children.length > 0 && expandedMenus[menu.title] && (
         <div className={`space-y-0 py-1 ${current.expandedBg}`}>
           {menu.children.map((child: any) => {
-            const isChildActive = activeMenu === child.title;
+            const hasSubChildren = child.children && child.children.length > 0;
+            const isChildActive = activeMenu === child.title && !hasSubChildren;
+            const isSubExpanded = expandedMenus[child.title];
+
             return (
-              <button
-                key={child.title}
-                onClick={() => setActiveMenu(child.title)}
-                className={`w-full text-left pl-14 pr-6 py-2.5 text-sm transition-colors ${
-                  isChildActive 
-                    ? current.subMenuActive 
-                    : `${current.subMenuText} ${current.subMenuHover}`
-                }`}
-              >
-                {child.title}
-              </button>
+              <div key={child.title}>
+                <button
+                  onClick={() => {
+                    if (hasSubChildren) {
+                      toggleMenu(child.title);
+                    } else {
+                      setActiveMenu(child.title);
+                    }
+                  }}
+                  className={`w-full text-left pl-14 pr-6 py-2.5 text-sm transition-colors flex items-center justify-between ${
+                    isChildActive 
+                      ? current.subMenuActive 
+                      : `${current.subMenuText} ${current.subMenuHover}`
+                  }`}
+                >
+                  <span>{child.title}</span>
+                  {hasSubChildren && (
+                    <span className="opacity-60">
+                      {isSubExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                    </span>
+                  )}
+                </button>
+                
+                {hasSubChildren && isSubExpanded && (
+                  <div className="bg-black/5 py-1">
+                    {child.children.map((subChild: any) => {
+                      const isSubChildActive = activeMenu === subChild.title;
+                      return (
+                        <button
+                          key={subChild.title}
+                          onClick={() => setActiveMenu(subChild.title)}
+                          className={`w-full text-left pl-20 pr-6 py-2 text-[13px] transition-colors ${
+                            isSubChildActive
+                              ? current.subMenuActive
+                              : `${current.subMenuText} opacity-80 hover:opacity-100`
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-1 h-1 rounded-full mr-2 ${isSubChildActive ? 'bg-[#419EFF]' : 'bg-current opacity-30'}`}></div>
+                            {subChild.title}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>

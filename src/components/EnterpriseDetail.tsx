@@ -96,6 +96,11 @@ export default function EnterpriseDetail({ id, onBack, onNavigate }: EnterpriseD
               <ReadOnlyField label="传真" value={enterprise.fax || "0591-88888889"} />
               <ReadOnlyField label="法人代码" value={enterprise.legalRepCode || "L12345678"} />
               <ReadOnlyField label="治安负责人" value={enterprise.securityManager || "王五"} />
+              <ReadOnlyField label="风险加信用等级" value={enterprise.riskCreditLevel || "B级"} />
+              <ReadOnlyField label="营业执照发证机构" value={enterprise.licenseAuthority || "某某工商局"} />
+              <ReadOnlyField label="税务登记证编号" value={enterprise.taxRegNo || "91350100XXXXXXX"} />
+              <ReadOnlyField label="税务登记证发证机构" value={enterprise.taxRegAuthority || "某某税务局"} />
+              <ReadOnlyField label="企业积分" value={enterprise.enterprisePoints || 0} />
               <ReadOnlyField label="经济类型" value={`${enterprise.economicType || '内资'}`} />
               <ReadOnlyField label="坐标经度" value={enterprise.longitude || "119.273456"} />
               <ReadOnlyField label="坐标纬度" value={enterprise.latitude || "26.104567"} />
@@ -148,6 +153,7 @@ export default function EnterpriseDetail({ id, onBack, onNavigate }: EnterpriseD
               <ReadOnlyField label="特行备案编号" value={enterprise.specialRecordNo || "TH-2023-001"} />
               <ReadOnlyField label="特行备案机构" value={enterprise.specialRecordAgency || "鼓楼分局治安大队"} />
               <ReadOnlyField label="行业许可证编号" value={enterprise.industryLicenseNo || "XK-2023-888"} />
+              <ReadOnlyField label="行业许可证发证机构" value={enterprise.industryLicenseAuthority || "某某交通局"} />
               <ReadOnlyField label="保卫部电话" value={enterprise.protectionDeptPhone || "0591-77777777"} />
               <ReadOnlyField label="治安管理机构" value={enterprise.securityAgency || "五凤派出所"} />
               <ReadOnlyField label="保卫人员数量" value={enterprise.protectionStaffCount || "5"} />

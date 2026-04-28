@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Save, X, Search, Calendar, Upload, Image as ImageIcon } from 'lucide-react';
+import DoubleCheckSupervision from './DoubleCheckSupervision';
 
 interface CasePunishmentFormProps {
   onCancel: () => void;
   onSave: () => void;
+  id?: string;
 }
 
-export default function CasePunishmentForm({ onCancel, onSave }: CasePunishmentFormProps) {
+export default function CasePunishmentForm({ onCancel, onSave, id }: CasePunishmentFormProps) {
   const [formData, setFormData] = useState({
     punishedUnit: '',
     punishmentDate: '',
@@ -319,6 +321,9 @@ export default function CasePunishmentForm({ onCancel, onSave }: CasePunishmentF
               </div>
             </div>
           </div>
+
+          {/* 一案双查督办 - Edit mode only */}
+          {id && <DoubleCheckSupervision defaultStarted={true} readOnly={false} />}
         </div>
       </div>
 

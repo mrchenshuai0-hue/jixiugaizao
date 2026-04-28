@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCcw, Plus, Download, Eye, Edit, ChevronDown } from 'lucide-react';
+import { Search, RotateCcw, Download, Eye, ChevronDown, RefreshCw, ClipboardList, CheckCircle2, AlertCircle, FileEdit } from 'lucide-react';
 import { api } from '../api';
 import { Inspection } from '../types';
 
 interface InspectionListProps {
-  onAdd: () => void;
   onView: (id: string) => void;
 }
 
-export default function InspectionList({ onAdd, onView }: InspectionListProps) {
+export default function InspectionList({ onView }: InspectionListProps) {
   const [data, setData] = useState<Inspection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const handleSync = () => {
+    setSyncing(true);
+    setTimeout(() => {
+      setSyncing(false);
+    }, 1500);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +49,46 @@ export default function InspectionList({ onAdd, onView }: InspectionListProps) {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
+              <ClipboardList size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">检查总次数</div>
+              <div className="text-xl font-bold text-gray-800">2,845</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
+              <CheckCircle2 size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">合格率</div>
+              <div className="text-xl font-bold text-gray-800">92.4%</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
+               <AlertCircle size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">存在问题数</div>
+              <div className="text-xl font-bold text-gray-800">216</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-indigo-50 rounded-full text-indigo-500 mr-4">
+              <FileEdit size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">专项检查次数</div>
+              <div className="text-xl font-bold text-gray-800">45</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100">
@@ -126,11 +173,15 @@ export default function InspectionList({ onAdd, onView }: InspectionListProps) {
               >
                 省涉企检查系统
               </button>
+              <button 
+                onClick={handleSync}
+                disabled={syncing}
+                className="h-8 px-4 bg-white border border-[#419EFF] text-[#419EFF] rounded hover:bg-blue-50 transition-colors flex items-center text-sm font-medium disabled:opacity-50"
+              >
+                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? '同步中...' : '同步数据'}
+              </button>
               <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
                 <Download size={14} className="mr-1.5" /> 导出
-              </button>
-              <button onClick={onAdd} className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
-                <Plus size={14} className="mr-1.5" /> 检查登记
               </button>
             </div>
           </div>
@@ -178,32 +229,11 @@ export default function InspectionList({ onAdd, onView }: InspectionListProps) {
                         {row.situation === '正常' ? '否' : '是'}
                       </span>
                     </td>
-                    <td className={`px-4 py-3 text-center sticky right-0 bg-white shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.02)] group-hover:bg-blue-50/50 transition-colors ${openDropdown === row.id ? 'z-50' : 'z-10'}`}>
-                      <div className="flex items-center justify-center space-x-2">
-                        <button onClick={() => onView(row.id)} className="text-[#419EFF] hover:text-blue-700 font-medium">
-                          详情
+                    <td className={`px-4 py-3 text-center sticky right-0 bg-white shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.02)] group-hover:bg-blue-50/50 transition-colors`}>
+                      <div className="flex items-center justify-center">
+                        <button onClick={() => onView(row.id)} className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center">
+                          <Eye size={14} className="mr-1" /> 详情
                         </button>
-                        <button className="text-[#419EFF] hover:text-blue-700 font-medium">
-                          修改
-                        </button>
-                        <div className="relative">
-                          <button 
-                            className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
-                            onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
-                          >
-                            <ChevronDown size={14} />
-                          </button>
-                          {openDropdown === row.id && (
-                            <>
-                              <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-20 py-1">
-                                <button className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                  删除
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </div>
                       </div>
                     </td>
                   </tr>

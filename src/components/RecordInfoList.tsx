@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, RotateCcw, Download, Bell } from 'lucide-react';
+import { Search, RotateCcw, Download, Bell, ShieldCheck, AlertCircle, Clock, Plus } from 'lucide-react';
 
 interface RecordInfoListProps {
   onViewDetail: (id: string) => void;
@@ -27,6 +27,46 @@ export default function RecordInfoList({ onViewDetail }: RecordInfoListProps) {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#1ebcaf] mr-4">
+              <ShieldCheck size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">已备案总数</div>
+              <div className="text-xl font-bold text-gray-800">842</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-orange-50 rounded-full text-[#ffc23e] mr-4">
+              <Clock size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">待审核信息</div>
+              <div className="text-xl font-bold text-gray-800">15</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-red-50 rounded-full text-[#fa5e45] mr-4">
+               <AlertCircle size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">备案到期提醒</div>
+              <div className="text-xl font-bold text-gray-800">32</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
+              <Plus size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">本月新增备案</div>
+              <div className="text-xl font-bold text-gray-800">8</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 顶部查询筛选区 */}
           <div className="p-5 border-b border-gray-100">

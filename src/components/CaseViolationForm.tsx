@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Save, X, Search, Calendar, Upload } from 'lucide-react';
+import DoubleCheckSupervision from './DoubleCheckSupervision';
 
 interface CaseViolationFormProps {
   onCancel: () => void;
   onSave: () => void;
+  id?: string;
 }
 
-export default function CaseViolationForm({ onCancel, onSave }: CaseViolationFormProps) {
+export default function CaseViolationForm({ onCancel, onSave, id }: CaseViolationFormProps) {
   const [formData, setFormData] = useState({
     companyName: '',
     violator: '',
@@ -219,6 +221,9 @@ export default function CaseViolationForm({ onCancel, onSave }: CaseViolationFor
               </div>
             </div>
           </div>
+          
+          {/* 一案双查督办 - Edit mode only */}
+          {id && <DoubleCheckSupervision defaultStarted={true} readOnly={false} />}
         </div>
       </div>
 

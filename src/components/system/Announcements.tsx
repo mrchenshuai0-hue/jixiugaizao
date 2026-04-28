@@ -57,10 +57,10 @@ export default function Announcements() {
                       <button className="text-[#419EFF] hover:text-blue-700 font-medium">查看</button>
                       <div className="relative">
                         <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center"
+                          className="text-[#419EFF] hover:text-blue-700 font-medium flex items-center p-1"
                           onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === msg.id ? null : msg.id); }}
                         >
-                          更多 <ChevronDown size={14} className="ml-0.5" />
+                          <ChevronDown size={14} />
                         </button>
                         {openDropdown === msg.id && (
                           <>

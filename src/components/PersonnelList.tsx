@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCcw, Plus, Download, ChevronDown, Eye, Edit, User, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Search, RotateCcw, Plus, Download, ChevronDown, Eye, Edit, User, ShieldCheck, AlertTriangle, Users, UserPlus, UserMinus, ShieldAlert } from 'lucide-react';
 import { api } from '../api';
 import { Personnel } from '../types';
 
@@ -64,6 +64,46 @@ export default function PersonnelList({ onViewDetail, onAdd, onEdit }: Personnel
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5] relative">
       <div className="flex-1 p-3 overflow-auto custom-scrollbar">
+        {/* 统计卡片区 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
+              <Users size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">从业人员总数</div>
+              <div className="text-xl font-bold text-gray-800">5,642</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
+              <UserPlus size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">本月入职</div>
+              <div className="text-xl font-bold text-gray-800">124</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
+              <ShieldAlert size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">预警人员</div>
+              <div className="text-xl font-bold text-gray-800">3</div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
+            <div className="p-3 bg-gray-50 rounded-full text-gray-500 mr-4">
+              <UserMinus size={24} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-1">本月离职</div>
+              <div className="text-xl font-bold text-gray-800">42</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           
           {/* 查询区 */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Save, MapPin, AlertCircle, Search, Image as ImageIcon, CheckCircle2, XCircle, ShieldCheck, Settings, Info, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Save, MapPin, AlertCircle, Search, Image as ImageIcon, CheckCircle2, XCircle, ShieldCheck, Settings, Info, ChevronDown, Plus } from 'lucide-react';
 
 const APPROVED_ENTERPRISES = [
   { 
@@ -94,6 +94,12 @@ export default function EnterpriseForm({ id, onCancel, onSave }: EnterpriseFormP
   const [fax, setFax] = useState("");
   const [legalPersonCode, setLegalPersonCode] = useState("");
   const [securityPrincipal, setSecurityPrincipal] = useState("");
+  const [riskCreditLevel, setRiskCreditLevel] = useState("A级");
+  const [licenseAuthority, setLicenseAuthority] = useState("");
+  const [taxRegNo, setTaxRegNo] = useState("");
+  const [taxRegAuthority, setTaxRegAuthority] = useState("");
+  const [enterprisePoints, setEnterprisePoints] = useState(0);
+  const [enterpriseStatus, setEnterpriseStatus] = useState("正常营业");
   const [managedUnit, setManagedUnit] = useState("马尾区公安局"); // 列管单位
   const [safetyFacilities, setSafetyFacilities] = useState([
     { id: '1', hasMonitor: '是', layoutMap: null, testReport: null, channels: '16', points: '12', guardRoom: 'A座302' }
@@ -112,6 +118,7 @@ export default function EnterpriseForm({ id, onCancel, onSave }: EnterpriseFormP
   const [specialIndustryRecordNo, setSpecialIndustryRecordNo] = useState("");
   const [specialIndustryRecordAgency, setSpecialIndustryRecordAgency] = useState("");
   const [industryLicenseNo, setIndustryLicenseNo] = useState("");
+  const [industryLicenseAuthority, setIndustryLicenseAuthority] = useState("");
   const [securityDeptPhone, setSecurityDeptPhone] = useState("");
   const [securityAgency, setSecurityAgency] = useState("");
   const [securityStaffCount, setSecurityStaffCount] = useState("");
@@ -641,6 +648,54 @@ export default function EnterpriseForm({ id, onCancel, onSave }: EnterpriseFormP
                   <label className="text-sm font-medium text-gray-700 flex items-center">治安负责人</label>
                   <input value={securityPrincipal} onChange={(e) => setSecurityPrincipal(e.target.value)} placeholder="请输入治安负责人姓名" className="h-10 px-3 border border-gray-300 rounded text-sm focus:border-[#419EFF] outline-none" />
                 </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">风险加信用等级</label>
+                  <select 
+                    value={riskCreditLevel}
+                    onChange={(e) => setRiskCreditLevel(e.target.value)}
+                    className="w-full h-10 px-3 border border-gray-300 rounded outline-none focus:border-[#419EFF] text-sm bg-white"
+                  >
+                    <option value="A级">A级</option>
+                    <option value="B级">B级</option>
+                    <option value="C级">C级</option>
+                    <option value="D级">D级</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">营业执照发证机构</label>
+                  <input value={licenseAuthority} onChange={(e) => setLicenseAuthority(e.target.value)} placeholder="请输入发证机构全称" className="h-10 px-3 border border-gray-300 rounded text-sm focus:border-[#419EFF] outline-none" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">税务登记证编号</label>
+                  <input value={taxRegNo} onChange={(e) => setTaxRegNo(e.target.value)} placeholder="请输入税务登记证号" className="h-10 px-3 border border-gray-300 rounded text-sm focus:border-[#419EFF] outline-none" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">税务登记证发证机构</label>
+                  <input value={taxRegAuthority} onChange={(e) => setTaxRegAuthority(e.target.value)} placeholder="请输入发证机构全称" className="h-10 px-3 border border-gray-300 rounded text-sm focus:border-[#419EFF] outline-none" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">企业积分</label>
+                  <input type="number" value={enterprisePoints} onChange={(e) => setEnterprisePoints(Number(e.target.value))} placeholder="0" className="h-10 px-3 border border-gray-300 rounded text-sm focus:border-[#419EFF] outline-none" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center">企业状态</label>
+                  <select 
+                    value={enterpriseStatus}
+                    onChange={(e) => setEnterpriseStatus(e.target.value)}
+                    className="w-full h-10 px-3 border border-gray-300 rounded outline-none focus:border-[#419EFF] text-sm bg-white"
+                  >
+                    <option value="正常营业">正常营业</option>
+                    <option value="停业">停业</option>
+                    <option value="注销">注销</option>
+                    <option value="歇业">歇业</option>
+                  </select>
+                </div>
               </div>
 
               {/* 备案信息板块 (只展示) */}
@@ -695,6 +750,10 @@ export default function EnterpriseForm({ id, onCancel, onSave }: EnterpriseFormP
                   <input value={industryLicenseNo} onChange={(e) => setIndustryLicenseNo(e.target.value)} placeholder="请输入行业许可证号" className="h-10 px-3 border border-gray-300 rounded text-sm outline-none focus:border-[#419EFF]" />
                 </div>
                 <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700">行业许可证发证机构</label>
+                  <input value={industryLicenseAuthority} onChange={(e) => setIndustryLicenseAuthority(e.target.value)} placeholder="请输入发证机构名称" className="h-10 px-3 border border-gray-300 rounded text-sm outline-none focus:border-[#419EFF]" />
+                </div>
+                <div className="flex flex-col gap-2">
                   <label className="text-sm font-medium text-gray-700">保卫部电话</label>
                   <input value={securityDeptPhone} onChange={(e) => setSecurityDeptPhone(e.target.value)} placeholder="请输入保卫部门电话" className="h-10 px-3 border border-gray-300 rounded text-sm outline-none focus:border-[#419EFF]" />
                 </div>
@@ -734,8 +793,14 @@ export default function EnterpriseForm({ id, onCancel, onSave }: EnterpriseFormP
                 </div>
 
                 <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="text-sm font-medium text-gray-700">税务登记证发证机构</label>
-                  <input value={taxAgency} onChange={(e) => setTaxAgency(e.target.value)} placeholder="请输入登记机构全称" className="h-10 px-3 border border-gray-300 rounded text-sm outline-none focus:border-[#419EFF]" />
+                  <label className="text-sm font-medium text-gray-700">其他发证机构</label>
+                  <input value={taxAgency} onChange={(e) => setTaxAgency(e.target.value)} placeholder="请输入其他登记机构全称" className="h-10 px-3 border border-gray-300 rounded text-sm outline-none focus:border-[#419EFF]" />
+                </div>
+
+                <div className="flex flex-col gap-2 md:col-span-2 py-4">
+                  <button className="w-fit px-4 py-2 bg-white border border-[#419EFF] text-[#419EFF] rounded hover:bg-blue-50 transition-colors flex items-center text-sm font-medium">
+                     <Plus size={14} className="mr-1.5" /> 插入人员 (保卫/治安)
+                  </button>
                 </div>
 
                 <div className="flex flex-col gap-2">
