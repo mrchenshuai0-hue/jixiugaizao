@@ -73,7 +73,7 @@ export default function App() {
       case '企业基础信息': return <EnterpriseManagement onNavigate={openTab} />;
       case '等级评定管理': return <LevelAssessmentManagement />;
       case '从业人员信息查询': return <PersonnelManagement initialTab="info" />;
-      case '从业人员处罚管理': return <PersonnelManagement initialTab="punishment" />;
+      case '从业人员处罚信息': return <PersonnelManagement initialTab="punishment" />;
       case '从业人员黑名单': return <PersonnelManagement initialTab="blacklist" />;
       case '重点人员查询': return <PersonnelManagement initialTab="key_personnel" />;
       case '检查记录查询': return <InspectionManagement initialTab="records" />;

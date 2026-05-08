@@ -50,7 +50,6 @@ const initialMenuData = [
         title: '从业人员信息',
         children: [
           { title: '从业人员信息查询' },
-          { title: '从业人员处罚管理' },
           { title: '从业人员黑名单' },
           { title: '重点人员查询' }
         ]
@@ -66,7 +65,8 @@ const initialMenuData = [
         title: '案事件信息',
         children: [
           { title: '违法违规信息' },
-          { title: '企业处罚信息' }
+          { title: '企业处罚信息' },
+          { title: '从业人员处罚信息' }
         ]
       }
     ]
@@ -76,8 +76,7 @@ const initialMenuData = [
     title: '承修信息',
     icon: <Car size={20} />,
     children: [
-      { title: '车辆信息管理' },
-      { title: '租赁车辆查询' }
+      { title: '车辆信息管理' }
     ]
   },
   {
