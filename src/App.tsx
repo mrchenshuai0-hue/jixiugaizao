@@ -27,6 +27,24 @@ import RoleManagement from './components/system/RoleManagement';
 import PermissionManagement from './components/system/PermissionManagement';
 import SystemMonitor from './components/system/SystemMonitor';
 import RentalVehicleQuery from './components/RentalVehicleQuery';
+import BusinessOperationsManagement from './components/BusinessOperationsManagement';
+import VenueReportReward from './components/VenueReportReward';
+import SafetyInspectionManagement from './components/SafetyInspectionManagement';
+import ViolationManagement from './components/ViolationManagement';
+import PractitionerPunishment from './components/PractitionerPunishment';
+import AlarmManagement from './components/AlarmManagement';
+import SuspectManagement from './components/SuspectManagement';
+import CapturedFugitiveRegistration from './components/CapturedFugitiveRegistration';
+import AlarmInfoPush from './components/AlarmInfoPush';
+import WarningInfoView from './components/WarningInfoView';
+import HighFreqTracking from './components/HighFreqTracking';
+import KeyPersonnelControl from './components/KeyPersonnelControl';
+import ProblemFeedback from './components/ProblemFeedback';
+import CustomControl from './components/CustomControl';
+import EnterpriseAverageUploadStatistics from './components/statistics/EnterpriseAverageUploadStatistics';
+import EnterpriseUploadRateStatistics from './components/statistics/EnterpriseUploadRateStatistics';
+import AlarmInfoStatistics from './components/statistics/AlarmInfoStatistics';
+import LargeScreenDisplay from './components/LargeScreenDisplay';
 
 export type ThemeType = 'light' | 'dark' | 'theme';
 
@@ -70,16 +88,20 @@ export default function App() {
     switch (id) {
       case '首页': return <Home onNavigate={openTab} />;
       case '备案信息': return <RecordInfoDisplay />;
-      case '企业基础信息': return <EnterpriseManagement onNavigate={openTab} />;
+      case '企业基础信息': return <EnterpriseManagement initialRegion={navParams[id]?.region} onNavigate={openTab} />;
       case '等级评定管理': return <LevelAssessmentManagement />;
-      case '从业人员信息查询': return <PersonnelManagement initialTab="info" />;
-      case '从业人员处罚信息': return <PersonnelManagement initialTab="punishment" />;
-      case '从业人员黑名单': return <PersonnelManagement initialTab="blacklist" />;
-      case '重点人员查询': return <PersonnelManagement initialTab="key_personnel" />;
-      case '检查记录查询': return <InspectionManagement initialTab="records" />;
+      case '从业人员信息查询': return <PersonnelManagement initialRegion={navParams[id]?.region} initialTab="info" />;
+      case '从业人员处罚信息':
+      case '从业人员被处罚信息': return <PersonnelManagement initialRegion={navParams[id]?.region} initialTab="punishment" />;
+      case '从业人员黑名单': return <PersonnelManagement initialRegion={navParams[id]?.region} initialTab="blacklist" />;
+      case '重点人员查询': return <PersonnelManagement initialRegion={navParams[id]?.region} initialTab="key_personnel" />;
+      case '检查记录查询': return <InspectionManagement initialRegion={navParams[id]?.region} initialTab="records" />;
       case '问题整改跟踪': return <InspectionManagement initialTab="rectification" />;
-      case '违法违规信息': return <CaseManagement initialTab="violation" />;
-      case '企业处罚信息': return <CaseManagement initialTab="punishment" />;
+      case '场所营业日志': return <BusinessOperationsManagement initialTab="logs" />;
+      case '企业安全巡检': return <SafetyInspectionManagement />;
+      case '从业人员考勤管理': return <BusinessOperationsManagement initialTab="attendance" />;
+      case '场所内发生案事件情况': return <CaseManagement initialTab="violation" />;
+      case '场所被查处情况': return <CaseManagement initialTab="punishment" />;
       case '车辆信息管理': return <VehicleManagement />;
       case '租赁车辆查询': return <RentalVehicleQuery />;
       case '企业发展趋势': return <div className="p-3 h-full overflow-auto"><EnterpriseTrendStatistics /></div>;
@@ -93,6 +115,22 @@ export default function App() {
       case '重点人员分析': return <div className="p-3 h-full overflow-auto"><TargetPersonnelAnalysis /></div>;
       case '在逃人员抓获统计': return <div className="p-3 h-full overflow-auto"><FugitiveStatistics /></div>;
       case '等级评定': return <LevelAssessmentManagement />;
+      case '场所举报奖励': return <VenueReportReward />;
+      case '违法违规管理': return <ViolationManagement />;
+      case '报警信息管理': return <AlarmManagement />;
+      case '可疑人员管理': return <SuspectManagement />;
+      case '抓获在逃人员补登': return <CapturedFugitiveRegistration />;
+      case '报警信息推送': return <AlarmInfoPush />;
+      case '预警信息查看': return <WarningInfoView />;
+      case '高频人群跟踪分析': return <HighFreqTracking />;
+      case '重点人员管控': return <KeyPersonnelControl />;
+      case '问题反馈': return <ProblemFeedback />;
+      case '自定义布控': return <CustomControl />;
+      case '从业人员处罚管理': return <PractitionerPunishment />;
+      case '企业平均上传数量统计': return <div className="p-3 h-full overflow-auto"><EnterpriseAverageUploadStatistics /></div>;
+      case '企业上传率统计': return <div className="p-3 h-full overflow-auto"><EnterpriseUploadRateStatistics /></div>;
+      case '报警信息统计': return <div className="p-3 h-full overflow-auto"><AlarmInfoStatistics /></div>;
+      case '大屏展示': return <LargeScreenDisplay />;
       case '评价标准设置':
       case '考核项目配置':
         return <AssessmentStandardSettings initialTab="items" />;

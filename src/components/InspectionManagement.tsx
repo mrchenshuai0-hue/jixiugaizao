@@ -9,9 +9,10 @@ type TabType = 'records' | 'rectification';
 interface InspectionManagementProps {
   initialView?: 'list' | 'form';
   initialTab?: TabType;
+  initialRegion?: string;
 }
 
-export default function InspectionManagement({ initialView = 'list', initialTab = 'records' }: InspectionManagementProps = {}) {
+export default function InspectionManagement({ initialView = 'list', initialTab = 'records', initialRegion }: InspectionManagementProps = {}) {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [view, setView] = useState<'list' | 'form'>(initialView);
 
@@ -32,7 +33,7 @@ export default function InspectionManagement({ initialView = 'list', initialTab 
           ) : (
             <>
               {activeTab === 'records' && (
-                <InspectionList onView={(id) => setView('form')} />
+                <InspectionList initialRegion={initialRegion} onView={(id) => setView('form')} />
               )}
               {activeTab === 'rectification' && (
                 <InspectionRectification />

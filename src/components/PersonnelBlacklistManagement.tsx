@@ -30,62 +30,24 @@ function BlacklistList({ onAdd, onEdit, onRemove }: { onAdd: () => void, onEdit:
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
         <div className="flex-1 p-3 overflow-auto">
-          {/* 统计卡片区 */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
-                <ShieldAlert size={24} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 mb-1">黑名单人员总数</div>
-                <div className="text-xl font-bold text-gray-800">128</div>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="p-3 bg-orange-50 rounded-full text-orange-500 mr-4">
-                <AlertTriangle size={24} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 mb-1">本月新增人数</div>
-                <div className="text-xl font-bold text-gray-800">4</div>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
-                <User size={24} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 mb-1">涉及企业数量</div>
-                <div className="text-xl font-bold text-gray-800">86</div>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="p-3 bg-gray-50 rounded-full text-gray-500 mr-4">
-                <Trash2 size={24} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 mb-1">已移出人数</div>
-                <div className="text-xl font-bold text-gray-800">15</div>
-              </div>
-            </div>
-          </div>
-
           <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
-          <div className="p-5 border-b border-gray-100">
-            <div className="flex flex-wrap gap-4 items-end">
-              <div className="w-48">
-                <label className="block text-sm text-[#666666] mb-1.5">姓名</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入姓名" />
+          <div className="p-5 border-b border-gray-100 flex items-start justify-between">
+            <div className="flex-1 grid grid-cols-3 gap-6 mr-6">
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">姓名</label>
+                <input type="text" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入姓名" />
               </div>
-              <div className="w-56">
-                <label className="block text-sm text-[#666666] mb-1.5">身份证号</label>
-                <input type="text" className="w-full h-8 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入身份证号" />
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">身份证号</label>
+                <input type="text" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" placeholder="请输入身份证号" />
               </div>
-              <div className="flex space-x-2 ml-auto">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium">
+            </div>
+            <div className="flex flex-col items-end gap-2 shrink-0">
+              <div className="flex space-x-2">
+                <button className="h-9 px-5 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium shadow-sm">
                   <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
+                <button className="h-9 px-5 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium shadow-sm">
                   <RotateCcw size={14} className="mr-1.5" /> 重置
                 </button>
               </div>

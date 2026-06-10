@@ -7,16 +7,66 @@ interface EnterpriseListProps {
   onViewDetail: (id: string) => void;
   onAdd: () => void;
   onEdit: (id: string) => void;
+  initialRegion?: string;
 }
 
-export default function EnterpriseList({ onViewDetail, onAdd, onEdit }: EnterpriseListProps) {
+export default function EnterpriseList({ onViewDetail, onAdd, onEdit, initialRegion }: EnterpriseListProps) {
   const [data, setData] = useState<Enterprise[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  // Modal states (inherited from previous requirement, will keep for the "Audit" logic)
+  // Modal states
   const [activeModal, setActiveModal] = useState<'password' | 'change' | 'closure' | 'fault' | null>(null);
   const [selectedEnterprise, setSelectedEnterprise] = useState<Enterprise | null>(null);
+
+  // Expansion state
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Default query inputs
+  const [region, setRegion] = useState(initialRegion || '');
+  const [enterpriseName, setEnterpriseName] = useState('');
+  const [usccInput, setUsccInput] = useState('');
+  
+  // Extra query inputs
+  const [statusVal, setStatusVal] = useState('');
+  const [registerDateStart, setRegisterDateStart] = useState('');
+  const [registerDateEnd, setRegisterDateEnd] = useState('');
+  const [categoryVal, setCategoryVal] = useState('');
+  const [daysUnlogged, setDaysUnlogged] = useState('');
+  const [daysUnuploaded, setDaysUnuploaded] = useState('');
+  const [enterpriseCode, setEnterpriseCode] = useState('');
+  const [levelVal, setLevelVal] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [registeredAddress, setRegisteredAddress] = useState('');
+  const [legalRepPhone, setLegalRepPhone] = useState('');
+
+  // Applied filter state
+  const [appliedFilters, setAppliedFilters] = useState({
+    region: initialRegion || '',
+    enterpriseName: '',
+    usccInput: '',
+    statusVal: '',
+    registerDateStart: '',
+    registerDateEnd: '',
+    categoryVal: '',
+    daysUnlogged: '',
+    daysUnuploaded: '',
+    enterpriseCode: '',
+    levelVal: '',
+    postalCode: '',
+    registeredAddress: '',
+    legalRepPhone: '',
+  });
+
+  useEffect(() => {
+    if (initialRegion !== undefined) {
+      setRegion(initialRegion);
+      setAppliedFilters(prev => ({
+        ...prev,
+        region: initialRegion
+      }));
+    }
+  }, [initialRegion]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,342 +90,242 @@ export default function EnterpriseList({ onViewDetail, onAdd, onEdit }: Enterpri
   };
 
   const getRecordStatusStyle = (status: string) => {
-    switch (status) {
-      case '已备案': return 'bg-[#1ebcaf]/10 text-[#1ebcaf] border-[#1ebcaf]/20';
-      case '未备案': return 'bg-[#fa5e45]/10 text-[#fa5e45] border-[#fa5e45]/20';
-      case '备案过期': return 'bg-[#ffc23e]/10 text-[#ffc23e] border-[#ffc23e]/20';
-      case '待审核': return 'bg-blue-100 text-blue-600 border-blue-200';
-      default: return 'bg-gray-100 text-gray-600 border-gray-200';
-    }
+    if (status === '已备案') return 'text-green-600';
+    if (status === '未备案') return 'text-red-500';
+    return 'text-gray-500';
   };
 
+  const handleSearch = () => {
+    setAppliedFilters({
+      region, enterpriseName, usccInput, statusVal, registerDateStart, registerDateEnd,
+      categoryVal, daysUnlogged, daysUnuploaded, enterpriseCode, levelVal, postalCode,
+      registeredAddress, legalRepPhone,
+    });
+  };
+
+  const handleReset = () => {
+    setRegion(''); setEnterpriseName(''); setUsccInput(''); setStatusVal('');
+    setRegisterDateStart(''); setRegisterDateEnd(''); setCategoryVal(''); setDaysUnlogged('');
+    setDaysUnuploaded(''); setEnterpriseCode(''); setLevelVal(''); setPostalCode('');
+    setRegisteredAddress(''); setLegalRepPhone('');
+    setAppliedFilters({
+      region: '', enterpriseName: '', usccInput: '', statusVal: '', registerDateStart: '',
+      registerDateEnd: '', categoryVal: '', daysUnlogged: '', daysUnuploaded: '',
+      enterpriseCode: '', levelVal: '', postalCode: '', registeredAddress: '', legalRepPhone: '',
+    });
+  };
+
+  const filteredData = data.filter(row => {
+    if (appliedFilters.region && !(row.region || row.jurisdiction || '').toLowerCase().includes(appliedFilters.region.toLowerCase())) return false;
+    if (appliedFilters.enterpriseName) {
+      const kw = appliedFilters.enterpriseName.toLowerCase();
+      const matchesName = (row.name || '').toLowerCase().includes(kw);
+      const matchesBrand = (row.brandName || '').toLowerCase().includes(kw);
+      if (!matchesName && !matchesBrand) return false;
+    }
+    if (appliedFilters.usccInput && !(row.uscc || '').toLowerCase().includes(appliedFilters.usccInput.toLowerCase())) return false;
+    if (appliedFilters.statusVal && (row.status || '正常营业') !== appliedFilters.statusVal) return false;
+    if (appliedFilters.registerDateStart && (row.registerDate || '2020-01-01') < appliedFilters.registerDateStart) return false;
+    if (appliedFilters.registerDateEnd && (row.registerDate || '2020-01-01') > appliedFilters.registerDateEnd) return false;
+    if (appliedFilters.categoryVal && !(row.category || '').toLowerCase().includes(appliedFilters.categoryVal.toLowerCase())) return false;
+    if (appliedFilters.enterpriseCode && !(row.enterpriseCode || '').toLowerCase().includes(appliedFilters.enterpriseCode.toLowerCase())) return false;
+    if (appliedFilters.levelVal && !(row.level || '').toLowerCase().includes(appliedFilters.levelVal.toLowerCase())) return false;
+    if (appliedFilters.postalCode && !(row.postalCode || '').toLowerCase().includes(appliedFilters.postalCode.toLowerCase())) return false;
+    if (appliedFilters.registeredAddress && !(row.registeredAddress || '').toLowerCase().includes(appliedFilters.registeredAddress.toLowerCase())) return false;
+    if (appliedFilters.legalRepPhone && !(row.legalRepPhone || '').toLowerCase().includes(appliedFilters.legalRepPhone.toLowerCase())) return false;
+    return true;
+  });
+
   return (
-    <div className="flex flex-col h-full bg-[#F5F5F5] relative">
-      <div className="flex-1 p-3 overflow-auto custom-scrollbar">
-        {/* 统计卡片区 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
-              <Building2 size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">场所总数</div>
-              <div className="text-xl font-bold text-gray-800">1,284</div>
-            </div>
+    <div className="flex flex-col h-full bg-[#f0f2f5] p-4 font-sans">
+      
+      {/* 顶部查询卡片 */}
+      <div className="bg-white rounded-lg border border-gray-200 mb-4 px-6 py-5 shrink-0 flex items-start justify-between">
+        <div className="flex-1 grid grid-cols-3 gap-6 mr-6">
+          {/* 始终显示的3个字段 */}
+          <div className="flex items-center">
+            <label className="text-sm text-gray-700 w-24 shrink-0 font-medium whitespace-nowrap">所属辖区</label>
+            <select 
+              value={region} 
+              onChange={(e) => setRegion(e.target.value)} 
+              className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500 transition-colors"
+            >
+              <option value="">全部</option>
+              <option value="鼓楼">福州市鼓楼区</option>
+              <option value="台江">福州市台江区</option>
+              <option value="仓山">福州市仓山区</option>
+              <option value="晋安">福州市晋安区</option>
+              <option value="马尾">福州市马尾区</option>
+            </select>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
-              <Plus size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">本月新增</div>
-              <div className="text-xl font-bold text-gray-800">12</div>
-            </div>
+          <div className="flex items-center">
+            <label className="text-sm text-gray-700 w-24 shrink-0 font-medium whitespace-nowrap">企业名称</label>
+            <input 
+              type="text" value={enterpriseName} onChange={(e) => setEnterpriseName(e.target.value)} 
+              placeholder="公司名或招牌" 
+              className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500 transition-colors" 
+            />
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
-               <Star size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">AAA级占比</div>
-              <div className="text-xl font-bold text-gray-800">18.5%</div>
-            </div>
+          <div className="flex items-center">
+            <label className="text-sm text-gray-700 w-32 shrink-0 font-medium whitespace-nowrap">社会统一信用代码</label>
+            <input 
+              type="text" value={usccInput} onChange={(e) => setUsccInput(e.target.value)} 
+              placeholder="请输入社会信用代码" 
+              className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500 transition-colors" 
+            />
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
-              <AlertTriangle size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">风险隐患企业</div>
-              <div className="text-xl font-bold text-gray-800">5</div>
-            </div>
+
+          {/* 展开的字段 */}
+          {isExpanded && (
+            <>
+              <div className="flex items-center">
+                <label className="text-sm text-gray-700 w-24 shrink-0 font-medium whitespace-nowrap">企业状态</label>
+                <select value={statusVal} onChange={(e) => setStatusVal(e.target.value)} className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500">
+                  <option value="">全部</option><option value="正常营业">正常营业</option><option value="停业">停业</option>
+                  <option value="注销">注销</option><option value="歇业">歇业</option>
+                </select>
+              </div>
+              <div className="flex items-center col-span-2">
+                <label className="text-sm text-gray-700 w-24 shrink-0 font-medium whitespace-nowrap">登记时间</label>
+                <div className="flex items-center flex-1 space-x-2">
+                  <input type="date" value={registerDateStart} onChange={(e) => setRegisterDateStart(e.target.value)} className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500" />
+                  <span className="text-gray-400">至</span>
+                  <input type="date" value={registerDateEnd} onChange={(e) => setRegisterDateEnd(e.target.value)} className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500" />
+                </div>
+              </div>
+              <div className="flex items-center">
+                <label className="text-sm text-gray-700 w-24 shrink-0 font-medium whitespace-nowrap">企业类别</label>
+                <select value={categoryVal} onChange={(e) => setCategoryVal(e.target.value)} className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500">
+                  <option value="">全部</option><option value="一类">一类维修</option><option value="二类">二类维修</option>
+                  <option value="三类">三类维修</option><option value="摩托车">摩托车维修</option><option value="其他">其他</option>
+                </select>
+              </div>
+              <div className="flex items-center">
+                <label className="text-sm text-gray-700 w-24 shrink-0 font-medium whitespace-nowrap">企业编码</label>
+                <input type="text" value={enterpriseCode} onChange={(e) => setEnterpriseCode(e.target.value)} placeholder="请输入企业编码" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500" />
+              </div>
+              <div className="flex items-center">
+                <label className="text-sm text-gray-700 w-32 shrink-0 font-medium whitespace-nowrap">企业等级</label>
+                <select value={levelVal} onChange={(e) => setLevelVal(e.target.value)} className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded hover:border-blue-400 focus:outline-none focus:border-blue-500">
+                  <option value="">全部</option><option value="一类">一类</option><option value="二类">二类</option>
+                  <option value="三类">三类</option><option value="无证">无证</option>
+                </select>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button onClick={handleSearch} className="h-9 px-5 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors text-sm font-medium">
+            查询
+          </button>
+          <button onClick={handleReset} className="h-9 px-5 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors text-sm font-medium">
+            重置
+          </button>
+          <button onClick={() => setIsExpanded(!isExpanded)} className="h-9 px-5 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors text-sm font-medium flex items-center">
+            {isExpanded ? '收起' : '展开'}
+            <ChevronDown size={14} className={`ml-1 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+      </div>
+
+      {/* 底部列表内容卡片 */}
+      <div className="bg-white rounded-lg border border-gray-200 flex-1 flex flex-col overflow-hidden">
+        {/* 卡片头部 */}
+        <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100 shrink-0">
+          <h3 className="text-base font-bold text-gray-800 tracking-wide">企业信息列表</h3>
+          <div className="flex gap-2">
+            <button onClick={onAdd} className="h-8 px-4 bg-blue-50 text-[#419EFF] border border-blue-200 rounded hover:bg-blue-100 transition-colors text-sm font-medium">
+              新增
+            </button>
+            <button className="h-8 px-4 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors text-sm font-medium">
+              导出
+            </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
-          
-          {/* 查询区 (按新要求调整栏位) */}
-          <div className="p-5 border-b border-gray-100">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-4 gap-y-3">
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">行政区域</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
-                  <option value="">全部</option>
-                  <option value="fz">福州市</option>
-                  <option value="xm">厦门市</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">登录状态 (天未登录)</label>
-                <input type="text" placeholder="0 表示从未登录" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">上传状态 (天未上传)</label>
-                <input type="text" placeholder="0 表示从未上传" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">公司名称 (含招牌名)</label>
-                <input type="text" placeholder="公司名或招牌" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">企业编码</label>
-                <input type="text" placeholder="请输入企业编码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">企业等级</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
-                  <option value="">全部</option>
-                  <option value="AAA">AAA</option>
-                  <option value="AA">AA</option>
-                  <option value="A">A</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">邮政编码</label>
-                <input type="text" placeholder="请输入邮政编码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">注册地址</label>
-                <input type="text" placeholder="模糊查询地址" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">企业状态</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
-                  <option value="">全部</option>
-                  <option value="正常">正常营业</option>
-                  <option value="歇业">歇业</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">企业类别</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white">
-                  <option value="">全部</option>
-                  <option value="1">一类维修</option>
-                  <option value="2">二类维修</option>
-                  <option value="3">三类维修</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">法人代表电话</label>
-                <input type="text" placeholder="联系号码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">社会统一信用代码</label>
-                <input type="text" placeholder="18位信用代码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              
-              <div className="flex space-x-2 pt-5 xl:col-start-6 justify-end">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
-                  <Search size={14} className="mr-1.5" /> 查询
-                </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-xs font-medium">
-                  <RotateCcw size={14} className="mr-1.5" /> 重置
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* 操作区 (去除批量操作) */}
-          <div className="px-5 py-3 flex justify-between items-center bg-gray-50/50 border-b border-gray-100">
-            <div className="text-sm text-[#666666]">
-              共找到 <span className="text-[#419EFF] font-medium">{data.length}</span> 条记录
-            </div>
-            <div className="flex space-x-2">
-              <button 
-                onClick={onAdd}
-                className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium"
-              >
-                <Plus size={14} className="mr-1.5" /> 新增企业
-              </button>
-              <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
-                <Download size={14} className="mr-1.5" /> 导出
-              </button>
-            </div>
-          </div>
-
-          {/* 表格区 */}
-          <div className="flex-1 overflow-auto">
-            <table className="w-full text-left border-collapse min-w-[1200px]">
-              <thead>
-                <tr className="bg-gray-50 text-[#333333] text-sm border-b border-gray-200">
-                  <th className="px-4 py-3 w-12 text-center text-gray-400 font-medium">#</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">公司名称</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业编码</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业状态</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">风险加信用等级</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业所属辖区</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">注册地址</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">标准地址</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">招牌名</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业类别</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">所属派出所</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap text-center">企业等级</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业法人</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">法人代表电话</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">登记日期</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">最后登录时间</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">最后上传时间</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">企业人数</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">最后检查日期</th>
-                  <th className="px-4 py-3 font-medium whitespace-nowrap">检查次数</th>
-                  <th className="px-4 py-3 font-medium text-center w-32 sticky right-0 bg-gray-50 shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.05)]">操作</th>
+        {/* 表格区 */}
+        <div className="flex-1 overflow-auto">
+          <table className="w-full text-left border-collapse min-w-[1280px]">
+            <thead className="sticky top-0 bg-gray-50 z-10">
+              <tr className="text-gray-600 text-[13px] font-semibold border-b border-gray-200">
+                <th className="px-6 py-3 font-medium whitespace-nowrap w-1/5">公司名称</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap w-48">所属辖区</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">统一社会信用代码</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">对外招牌名</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap w-24">备案状态</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap w-24">经营状态</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap w-32">登记时间</th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap w-32">变更时间</th>
+                <th className="px-6 py-3 font-medium text-center w-32">操作</th>
+              </tr>
+            </thead>
+            <tbody className="text-[13px] text-gray-700">
+              {loading ? (
+                <tr><td colSpan={9} className="px-6 py-10 text-center text-gray-500">加载中...</td></tr>
+              ) : filteredData.map((row, index) => (
+                <tr 
+                  key={row.id} 
+                  className={`border-b border-gray-100 hover:bg-blue-50/50 transition-colors even:bg-gray-50 bg-white group ${openDropdown === row.id ? 'relative z-[60]' : ''}`}
+                >
+                  <td className="px-6 py-3.5 whitespace-nowrap">{row.name}</td>
+                  <td className="px-6 py-3.5 whitespace-nowrap">{row.jurisdiction || row.region}</td>
+                  <td className="px-6 py-3.5 font-mono">{row.uscc}</td>
+                  <td className="px-6 py-3.5 whitespace-nowrap">{row.brandName || '--'}</td>
+                  <td className="px-6 py-3.5 whitespace-nowrap">
+                    {row.recordStatus || '-'}
+                  </td>
+                  <td className="px-6 py-3.5 whitespace-nowrap">
+                    <span className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
+                      row.status === '正常营业' || row.status === '正常' 
+                        ? 'text-green-600 border-green-200 bg-green-50' 
+                        : row.status === '停业'
+                        ? 'text-orange-600 border-orange-200 bg-orange-50'
+                        : 'text-gray-600 border-gray-200 bg-gray-50'
+                    }`}>
+                      {row.status || '正常营业'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-3.5 whitespace-nowrap font-mono">{row.registerDate || '2023-03-23'}</td>
+                  <td className="px-6 py-3.5 whitespace-nowrap font-mono">{row.updateDate || '-'}</td>
+                  <td className="px-6 py-3.5 text-center transition-colors">
+                    <div className="flex items-center justify-center gap-3">
+                      <button className="text-[#419EFF] hover:text-blue-700 font-medium text-[13px]" onClick={() => onViewDetail(row.id)}>详情</button>
+                      <button className="text-[#419EFF] hover:text-blue-700 font-medium text-[13px]" onClick={() => onEdit(row.id)}>修改</button>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="text-sm text-[#666666]">
-                {loading ? (
-                  <tr><td colSpan={22} className="px-4 py-10 text-center text-gray-500">加载中...</td></tr>
-                ) : data.map((row, index) => (
-                  <tr 
-                    key={row.id} 
-                    className={`border-b border-gray-100 hover:bg-blue-50/30 transition-colors cursor-pointer group ${openDropdown === row.id ? 'relative z-[60]' : ''}`}
-                    onClick={() => onViewDetail(row.id)}
-                  >
-                    <td className="px-4 py-3 text-center text-gray-400">{index + 1}</td>
-                    <td className="px-4 py-3 font-medium text-[#333333] whitespace-nowrap">{row.name}</td>
-                    <td className="px-4 py-3 font-mono whitespace-nowrap">{row.enterpriseCode || 'E' + row.id.substring(0, 8)}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded text-[10px] ${row.status === '正常' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                        {row.status || '正常营业'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.riskCreditLevel || 'B级'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.jurisdiction || row.region}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.registeredAddress || '福建省福州市...'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.address || '福州市鼓楼区...'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.brandName || '--'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.category}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.policeStation || '某某派出所'}</td>
-                    <td className="px-4 py-3 text-center whitespace-nowrap">{row.level || 'AA'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.legalRep}</td>
-                    <td className="px-4 py-3 font-mono text-gray-500 whitespace-nowrap">{row.legalRepPhone || '139****1234'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.registerDate || '2020-01-01'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.lastLoginTime || '2026-04-20 10:00'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.lastUploadTime || '2026-04-21 15:30'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.employeeCount || 10}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.lastCheck}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{row.inspectionCount || 5}</td>
-                    <td className={`px-4 py-3 text-center sticky right-0 bg-white group-hover:bg-[#f3f7ff] transition-colors ${openDropdown === row.id ? 'z-50' : 'z-10'}`}>
-                      <div className="flex items-center justify-center gap-4">
-                        <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium whitespace-nowrap text-xs"
-                          onClick={(e) => { e.stopPropagation(); onViewDetail(row.id); }}
-                        >
-                          详情
-                        </button>
-                        <button 
-                          className="text-[#419EFF] hover:text-blue-700 font-medium whitespace-nowrap text-xs"
-                          onClick={(e) => { e.stopPropagation(); onEdit(row.id); }}
-                        >
-                          修改
-                        </button>
-                        <div className="relative">
-                          <button 
-                            className="text-[#333] hover:text-[#419EFF] transition-colors p-1"
-                            onClick={(e) => { e.stopPropagation(); setOpenDropdown(openDropdown === row.id ? null : row.id); }}
-                          >
-                            <ChevronDown size={14} />
-                          </button>
-                          {openDropdown === row.id && (
-                            <>
-                              <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setOpenDropdown(null); }}></div>
-                              <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded shadow-lg z-[60] py-1 flex flex-col items-start overflow-hidden">
-                                <button 
-                                  onClick={(e) => { e.stopPropagation(); handleAction('password' as any, row); }}
-                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-gray-700 hover:bg-blue-50 hover:text-[#419EFF] transition-colors"
-                                >
-                                  <Key size={12} className="mr-2" /> 密码重置
-                                </button>
-                                <button 
-                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-orange-500 hover:bg-orange-50 transition-colors"
-                                >
-                                  <Clock size={12} className="mr-2" /> 停业
-                                </button>
-                                <button 
-                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-red-500 hover:bg-red-50 transition-colors"
-                                >
-                                  <XCircle size={12} className="mr-2" /> 注销
-                                </button>
-                                <button 
-                                  className="w-full flex items-center px-4 py-1.5 text-[10px] text-gray-500 hover:bg-gray-100 transition-colors"
-                                >
-                                  <AlertCircle size={12} className="mr-2" /> 歇业
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          {/* 分页区 */}
-          <div className="px-5 py-3 border-t border-gray-100 flex items-center justify-between bg-white">
-            <div className="text-xs text-[#666666]">
-              显示第 1 到第 {data.length} 条记录，总共 {data.length} 条记录
+        {/* 分页区 */}
+        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-end shrink-0">
+          <div className="flex items-center gap-4 text-[13px] text-gray-600">
+            <span>共 {filteredData.length} 条</span>
+            <select className="border border-gray-300 rounded px-2 py-1 bg-white focus:outline-none focus:border-blue-400">
+              <option>10条/页</option>
+              <option>20条/页</option>
+              <option>50条/页</option>
+            </select>
+            <div className="flex items-center gap-1">
+              <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:bg-gray-100">&lt;</button>
+              <button className="w-8 h-8 flex items-center justify-center border border-transparent bg-[#419EFF] text-white rounded">1</button>
+              <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">2</button>
+              <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">3</button>
+              <span className="w-8 h-8 flex items-center justify-center">...</span>
+              <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">33</button>
+              <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">&gt;</button>
             </div>
-            <div className="flex space-x-1">
-              <button className="px-3 py-1 border border-gray-300 rounded text-xs text-[#999999] bg-gray-50 cursor-not-allowed">上一页</button>
-              <button className="px-3 py-1 border border-[#419EFF] rounded text-xs text-white bg-[#419EFF]">1</button>
-              <button className="px-3 py-1 border border-gray-300 rounded text-xs text-[#666666] hover:bg-gray-50">下一页</button>
+            <div className="flex items-center gap-1">
+              前往 <input type="text" className="w-10 h-8 border border-gray-300 rounded text-center focus:outline-none focus:border-blue-400" defaultValue="1" /> 页
             </div>
           </div>
         </div>
       </div>
 
-      {activeModal === 'password' && selectedEnterprise && (
-        <AuditModal 
-          title="密码重置确认" 
-          enterprise={selectedEnterprise} 
-          onClose={() => setActiveModal(null)}
-          onConfirm={() => { alert('密码已成功重置并发送至该企业法人手机'); setActiveModal(null); }}
-        >
-          <div className="p-6 text-sm text-gray-600">
-            您确认要重置 <span className="font-bold text-gray-800">{selectedEnterprise.name}</span> 的登录密码吗？重置后，新密码将通过短信形式发送至法人代表 <span className="font-bold">{selectedEnterprise.uscc}</span> (模拟法人) 绑定的手机号中。
-          </div>
-        </AuditModal>
-      )}
     </div>
   );
 }
 
-function AuditModal({ title, enterprise, onClose, onConfirm, showAuditAction, children }: { 
-  title: string, 
-  enterprise: Enterprise, 
-  onClose: () => void, 
-  onConfirm: () => void,
-  showAuditAction?: boolean,
-  children: React.ReactNode 
-}) {
-  return (
-    <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl w-full max-w-xl flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-[#f8faff]">
-           <h3 className="text-lg font-bold text-gray-800">{title}</h3>
-           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600">
-             <XCircle size={20} />
-           </button>
-        </div>
-        <div className="bg-gray-50 px-6 py-3 border-b border-gray-100">
-          <p className="text-xs text-gray-400 mb-1">操作对象</p>
-          <p className="text-sm font-bold text-[#419EFF]">{enterprise.name}</p>
-        </div>
-        {children}
-        <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3 font-medium">
-           <button onClick={onClose} className="px-5 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors">取消</button>
-           {showAuditAction ? (
-             <>
-               <button onClick={() => { alert('已驳回申请'); onClose(); }} className="px-5 py-2 text-sm bg-white border border-red-200 text-red-500 rounded hover:bg-red-50 transition-colors">驳回</button>
-               <button onClick={onConfirm} className="px-8 py-2 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors shadow-sm">核准</button>
-             </>
-           ) : (
-             <button onClick={onConfirm} className="px-8 py-2 text-sm bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors shadow-sm">确定</button>
-           )}
-        </div>
-      </div>
-    </div>
-  );
-}

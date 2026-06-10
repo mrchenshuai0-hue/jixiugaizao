@@ -274,7 +274,7 @@ export default function RepairRecordDetail({ id, onBack }: RepairRecordDetailPro
               <Wrench size={18} className="text-[#419EFF] mr-2" />
               <h3 className="text-sm font-bold text-[#333333]">维修信息</h3>
             </div>
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+            <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-8">
               <div>
                 <span className="text-sm text-[#999999] block mb-1">维修类型</span>
                 <span className="text-sm text-[#333333] font-medium">{data.repair.type}</span>
@@ -283,29 +283,30 @@ export default function RepairRecordDetail({ id, onBack }: RepairRecordDetailPro
                 <span className="text-sm text-[#999999] block mb-1">创建时间</span>
                 <span className="text-sm text-[#333333] font-medium">{data.repair.createTime}</span>
               </div>
-              <div className="col-span-2">
+              <div></div>
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">维修内容</span>
                 <span className="text-sm text-[#333333] font-medium">{data.repair.content}</span>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">修理原因</span>
                 <span className="text-sm text-[#333333] font-medium">{data.repair.reason}</span>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">维修项目</span>
                 <span className="text-sm text-[#333333] font-medium">{data.repair.items}</span>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">车辆维修内容描述</span>
-                <div className="text-sm text-[#333333] leading-relaxed bg-gray-50 p-4 rounded border border-gray-100">
+                <div className="text-sm text-[#333333] leading-relaxed bg-gray-50 p-4 rounded border border-gray-200">
                   {data.repair.description}
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">车辆受损部位</span>
                 <span className="text-sm text-[#333333] font-medium">{data.repair.damageParts}</span>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">车辆照片</span>
                 <div className="flex space-x-4 mt-2">
                   {data.repair.vehicleImages.map((img, idx) => (
@@ -315,7 +316,7 @@ export default function RepairRecordDetail({ id, onBack }: RepairRecordDetailPro
                   ))}
                 </div>
               </div>
-              <div className="col-span-2">
+              <div className="md:col-span-3">
                 <span className="text-sm text-[#999999] block mb-1">车辆部位图像</span>
                 <div className="flex space-x-4 mt-2">
                   {data.repair.damageImages.map((img, idx) => (

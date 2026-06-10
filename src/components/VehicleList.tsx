@@ -53,46 +53,6 @@ export default function VehicleList({ onView }: VehicleListProps) {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
-        {/* 统计卡片区 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
-              <Car size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">入场维修总数</div>
-              <div className="text-xl font-bold text-gray-800">4,285</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
-              <Plus size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">本月新增登记</div>
-              <div className="text-xl font-bold text-gray-800">324</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
-               <RefreshCw size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">正在维修</div>
-              <div className="text-xl font-bold text-gray-800">56</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-gray-50 rounded-full text-gray-500 mr-4">
-              <Download size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">已出场交付</div>
-              <div className="text-xl font-bold text-gray-800">4,229</div>
-            </div>
-          </div>
-        </div>
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100 bg-white">
@@ -294,13 +254,6 @@ export default function VehicleList({ onView }: VehicleListProps) {
           <div className="px-5 py-3 flex justify-between items-center bg-gray-50 border-b border-gray-100">
             <div className="text-sm text-[#666666]">共找到 <span className="text-[#419EFF] font-medium">{data.length}</span> 辆车辆信息</div>
             <div className="flex space-x-2">
-              <button 
-                onClick={handleSync}
-                disabled={syncing}
-                className="h-8 px-4 bg-white border border-[#419EFF] text-[#419EFF] rounded hover:bg-blue-50 transition-colors flex items-center text-xs font-medium disabled:opacity-50"
-              >
-                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? '同步中...' : '同步数据'}
-              </button>
               <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
                 <Download size={14} className="mr-1.5" /> 导出
               </button>

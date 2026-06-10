@@ -40,20 +40,22 @@ export default function VehicleDetail({ id, onBack }: VehicleDetailProps) {
             deliveryName: '张三',
             idType: '身份证',
             idNo: '350102198505051234',
-            driverLicense: '350102198505051234',
             birthDate: '1985-05-05',
             gender: '男',
             ethnicity: '汉族',
             address: '福建省福州市鼓楼区某某街道123号',
-            idIssuer: '福州市公安局鼓楼分局',
-            idValidity: '2015.05.05-2035.05.05',
             phone: '13900139000',
-            workplace: '福州某商贸有限公司',
             receiveTime: '2024-04-14 09:30:00',
-            clerk: '王五',
-            machinePhoto: 'https://picsum.photos/seed/machine/400/300',
-            deliveryPhoto: 'https://picsum.photos/seed/person1/400/300',
-            pickupPhoto: 'https://picsum.photos/seed/person2/400/300'
+            pickupName: '李四',
+            pickupIdType: '身份证',
+            pickupIdNo: '350102198610105678',
+            pickupBirthDate: '1986-10-10',
+            pickupGender: '女',
+            pickupEthnicity: '汉族',
+            pickupAddress: '福建省福州市马尾区罗星街道55号',
+            pickupPhone: '13888889999',
+            pickupTime: '2024-04-16 16:30:00',
+            repairPrice: '1280.00'
           },
           repairs: [
             { id: 1, content: '更换机油、机滤', photo: 'https://picsum.photos/seed/rep1/400/300', reason: '常规保养', time: '2024-04-14 10:00:00' },
@@ -147,8 +149,8 @@ export default function VehicleDetail({ id, onBack }: VehicleDetailProps) {
             </h3>
           </div>
           <div className="p-6 flex flex-col md:flex-row gap-8">
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6">
-              <ReadOnlyField label="所属企业" value={data.basic.company} className="md:col-span-2 lg:col-span-3" />
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
+              <ReadOnlyField label="所属企业" value={data.basic.company} className="md:col-span-3" />
               <ReadOnlyField label="业务类型" value={data.basic.bizType} />
               <ReadOnlyField label="上传日期" value={data.basic.uploadDate} />
               <ReadOnlyField label="车牌号" value={data.basic.plateNo} />
@@ -159,11 +161,10 @@ export default function VehicleDetail({ id, onBack }: VehicleDetailProps) {
               <ReadOnlyField label="车辆型号" value={data.basic.model} />
               <ReadOnlyField label="发动机号" value={data.basic.engineNo} />
               <ReadOnlyField label="车架号" value={data.basic.vin} />
-              <ReadOnlyField label="行驶证芯编号" value={data.basic.licenseCoreNo} />
               <ReadOnlyField label="车主姓名" value={data.basic.owner} />
               <ReadOnlyField label="车主身份证号" value={data.basic.ownerId} />
               <ReadOnlyField label="车主联系方式" value={data.basic.ownerPhone} />
-              <ReadOnlyField label="车主公司" value={data.basic.ownerCompany} className="md:col-span-2 lg:col-span-3" />
+              <ReadOnlyField label="车主公司" value={data.basic.ownerCompany} className="md:col-span-3" />
             </div>
             <div className="w-64 shrink-0">
               <label className="text-sm font-medium text-gray-700 block mb-2">车辆图片</label>
@@ -182,29 +183,44 @@ export default function VehicleDetail({ id, onBack }: VehicleDetailProps) {
               交接信息
             </h3>
           </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6 mb-8">
-              <ReadOnlyField label="送车人姓名" value={data.handover.deliveryName} />
-              <ReadOnlyField label="证件类别" value={data.handover.idType} />
-              <ReadOnlyField label="证件号" value={data.handover.idNo} />
-              <ReadOnlyField label="机动车驾驶证号" value={data.handover.driverLicense} />
-              <ReadOnlyField label="出生日期" value={data.handover.birthDate} />
-              <ReadOnlyField label="性别" value={data.handover.gender} />
-              <ReadOnlyField label="民族" value={data.handover.ethnicity} />
-              <ReadOnlyField label="户籍地址" value={data.handover.address} className="md:col-span-2" />
-              <ReadOnlyField label="证件有效期限" value={data.handover.idValidity} />
-              <ReadOnlyField label="联系电话" value={data.handover.phone} />
-              <ReadOnlyField label="工作单位" value={data.handover.workplace} className="md:col-span-2" />
-              <ReadOnlyField label="收车时间" value={data.handover.receiveTime} />
-              <ReadOnlyField label="接车业务员" value={data.handover.clerk} />
+          <div className="p-6 space-y-8">
+            {/* 送车人相关信息 */}
+            <div>
+              <h4 className="text-xs font-bold text-[#419EFF] mb-4 flex items-center gap-1.5 border-b border-gray-100 pb-2">
+                <span className="w-1.5 h-3 bg-[#419EFF] rounded-full"></span>
+                送车人相关信息
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
+                <ReadOnlyField label="送车人姓名" value={data.handover.deliveryName} />
+                <ReadOnlyField label="证件类别" value={data.handover.idType} />
+                <ReadOnlyField label="证件号" value={data.handover.idNo} />
+                <ReadOnlyField label="出生日期" value={data.handover.birthDate} />
+                <ReadOnlyField label="性别" value={data.handover.gender} />
+                <ReadOnlyField label="民族" value={data.handover.ethnicity} />
+                <ReadOnlyField label="户籍地址" value={data.handover.address} className="md:col-span-2" />
+                <ReadOnlyField label="联系电话" value={data.handover.phone} />
+                <ReadOnlyField label="收车时间" value={data.handover.receiveTime} />
+              </div>
             </div>
-            <div className="pt-6 border-t border-gray-100">
-               <h4 className="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">交接照片</h4>
-               <div className="flex flex-wrap gap-6">
-                  <PhotoBox label="一体机拍摄图片" src={data.handover.machinePhoto} />
-                  <PhotoBox label="送车人照片" src={data.handover.deliveryPhoto} />
-                  <PhotoBox label="取车人照片" src={data.handover.pickupPhoto} />
-               </div>
+
+            {/* 取车人相关信息 */}
+            <div>
+              <h4 className="text-xs font-bold text-green-600 mb-4 flex items-center gap-1.5 border-b border-gray-100 pb-2">
+                <span className="w-1.5 h-3 bg-green-500 rounded-full"></span>
+                取车人相关信息
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
+                <ReadOnlyField label="取车人姓名" value={data.handover.pickupName} />
+                <ReadOnlyField label="证件类别" value={data.handover.pickupIdType} />
+                <ReadOnlyField label="证件号" value={data.handover.pickupIdNo} />
+                <ReadOnlyField label="出生日期" value={data.handover.pickupBirthDate} />
+                <ReadOnlyField label="性别" value={data.handover.pickupGender} />
+                <ReadOnlyField label="民族" value={data.handover.pickupEthnicity} />
+                <ReadOnlyField label="户籍地址" value={data.handover.pickupAddress} className="md:col-span-2" />
+                <ReadOnlyField label="联系电话" value={data.handover.pickupPhone} />
+                <ReadOnlyField label="取车时间" value={data.handover.pickupTime} />
+                <ReadOnlyField label="维修价格（元）" value={data.handover.repairPrice} />
+              </div>
             </div>
           </div>
         </section>

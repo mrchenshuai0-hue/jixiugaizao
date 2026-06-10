@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, X, Save, FileText, Camera, ArrowLeft } from 'lucide-react';
+import FloatingFormNavigation from './FloatingFormNavigation';
 
 interface InspectionFormProps {
   onCancel: () => void;
@@ -12,6 +13,12 @@ export default function InspectionForm({ onCancel, onSave, isReadOnly = false }:
   const [inspectionMethod, setInspectionMethod] = useState('例查');
   const [inspectionSituation, setInspectionSituation] = useState('正常');
   const [isDeduction, setIsDeduction] = useState(false);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const navItems = [
+    { id: 'inspection-basic', label: '基本检查信息' },
+    { id: 'inspection-items', label: '行政检查项目' }
+  ];
   
   const inspectionItems = [
     { id: 1, title: '一、企业备案信息', desc: '经营资质不合法，证、照不齐全' },
@@ -36,9 +43,9 @@ export default function InspectionForm({ onCancel, onSave, isReadOnly = false }:
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F5F5F5]">
-      <div className="flex-1 overflow-auto p-3 custom-scrollbar pb-20">
-        <div className="w-full bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden">
+    <div className="flex flex-col h-full bg-[#F5F5F5] relative">
+      <div ref={scrollContainerRef} className="flex-1 overflow-auto p-3 custom-scrollbar pb-20">
+        <div id="inspection-basic" className="w-full bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100 bg-[#F8FAFC] flex justify-between items-center">
             <h2 className="text-base font-bold text-[#333333] border-l-4 border-[#419EFF] pl-3">
               {isReadOnly ? '行政检查详情' : '行政检查登记'}
@@ -200,7 +207,7 @@ export default function InspectionForm({ onCancel, onSave, isReadOnly = false }:
               </div>
 
               {/* 检查项目表格 */}
-              <div className="mt-8">
+              <div id="inspection-items" className="mt-8">
                 <div className="text-center text-sm font-bold text-[#fa5e45] mb-2">检查项目</div>
                 <table className="w-full border-collapse border border-gray-200 text-sm">
                   <thead>
@@ -234,6 +241,8 @@ export default function InspectionForm({ onCancel, onSave, isReadOnly = false }:
           </div>
         </div>
       </div>
+
+      <FloatingFormNavigation scrollContainerRef={scrollContainerRef} items={navItems} />
 
       <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end shadow-sm z-20">
         <div className="flex space-x-3">

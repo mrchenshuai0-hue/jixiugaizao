@@ -48,46 +48,6 @@ export default function RentalVehicleQuery() {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5] overflow-hidden">
       <div className="flex-1 p-3 overflow-auto custom-scrollbar">
-        {/* 统计卡片区 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
-              <Car size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">租赁车辆总数</div>
-              <div className="text-xl font-bold text-gray-800">2,564</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
-              <Plus size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">在租车辆</div>
-              <div className="text-xl font-bold text-gray-800">1,842</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
-               <Clock size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">即将到期</div>
-              <div className="text-xl font-bold text-gray-800">45</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
-              <AlertTriangle size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">预警隐患车辆</div>
-              <div className="text-xl font-bold text-gray-800">12</div>
-            </div>
-          </div>
-        </div>
-
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           
           {/* 查询区 */}
@@ -152,14 +112,6 @@ export default function RentalVehicleQuery() {
               共找到 <span className="text-[#419EFF] font-medium">{data.length}</span> 条租赁记录
             </div>
             <div className="flex space-x-2">
-              <button 
-                onClick={handleSync}
-                disabled={syncing}
-                className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium disabled:opacity-50"
-              >
-                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} />
-                {syncing ? '同步中...' : '同步数据'}
-              </button>
               <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
                 <Download size={14} className="mr-1.5" /> 导出
               </button>

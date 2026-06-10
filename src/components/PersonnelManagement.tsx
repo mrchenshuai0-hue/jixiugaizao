@@ -12,9 +12,10 @@ type TabType = 'info' | 'punishment' | 'blacklist' | 'key_personnel' | 'warning'
 
 interface PersonnelManagementProps {
   initialTab?: TabType;
+  initialRegion?: string;
 }
 
-export default function PersonnelManagement({ initialTab = 'info' }: PersonnelManagementProps) {
+export default function PersonnelManagement({ initialTab = 'info', initialRegion }: PersonnelManagementProps) {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [view, setView] = useState<ViewState>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -59,6 +60,7 @@ export default function PersonnelManagement({ initialTab = 'info' }: PersonnelMa
             <>
               {view === 'list' && (
                 <PersonnelList 
+                  initialRegion={initialRegion}
                   onViewDetail={handleViewDetail} 
                   onAdd={handleAdd} 
                   onEdit={handleEdit} 

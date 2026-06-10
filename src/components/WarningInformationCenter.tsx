@@ -166,20 +166,24 @@ export default function WarningInformationCenter() {
     );
   }
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // ...
+  
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区 */}
-          <div className="p-5 border-b border-gray-100">
-            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">预警信息编号</label>
-                <input type="text" placeholder="请输入编号" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+          <div className="p-5 border-b border-gray-100 flex items-start justify-between">
+            <div className="flex-1 grid grid-cols-3 gap-6 mr-6">
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">预警信息编号</label>
+                <input type="text" placeholder="请输入编号" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
               </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">预警级别</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">预警级别</label>
+                <select className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
                   <option value="">全部</option>
                   <option value="red">红色预警</option>
                   <option value="orange">橙色预警</option>
@@ -187,40 +191,49 @@ export default function WarningInformationCenter() {
                   <option value="blue">蓝色预警</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">重点人员细类</label>
-                <input type="text" placeholder="请输入细类" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">重点人员细类</label>
+                <input type="text" placeholder="请输入细类" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
               </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">重点人员姓名</label>
-                <input type="text" placeholder="请输入姓名" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">身份证号</label>
-                <input type="text" placeholder="请输入身份证号" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">动态信息类别</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
-                  <option value="">全部</option>
-                  <option value="1">旅馆住宿</option>
-                  <option value="2">网吧上网</option>
-                  <option value="3">乘车信息</option>
-                  <option value="4">民航信息</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">预警发布时间</label>
-                <input type="date" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div className="flex space-x-2 pt-2 md:col-span-1 lg:col-span-3 justify-end">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
-                  <Search size={14} className="mr-1.5" />
-                  查询
+              
+              {isExpanded && (
+                <>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">重点人员姓名</label>
+                    <input type="text" placeholder="请输入姓名" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">身份证号</label>
+                    <input type="text" placeholder="请输入身份证号" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">动态信息类别</label>
+                    <select className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+                      <option value="">全部</option>
+                      <option value="1">旅馆住宿</option>
+                      <option value="2">网吧上网</option>
+                      <option value="3">乘车信息</option>
+                      <option value="4">民航信息</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">预警发布时间</label>
+                    <input type="date" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-col items-end gap-2 shrink-0">
+              <div className="flex space-x-2">
+                <button className="h-9 px-5 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium shadow-sm">
+                  <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 hover:text-[#333333] transition-colors flex items-center text-xs font-medium">
-                  <RotateCcw size={14} className="mr-1.5" />
-                  重置
+                <button className="h-9 px-5 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium shadow-sm">
+                  <RotateCcw size={14} className="mr-1.5" /> 重置
+                </button>
+                <button onClick={() => setIsExpanded(!isExpanded)} className="h-9 px-5 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors text-sm font-medium flex items-center">
+                  {isExpanded ? '收起' : '展开'}
                 </button>
               </div>
             </div>

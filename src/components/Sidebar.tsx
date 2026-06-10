@@ -10,6 +10,7 @@ import {
   ShieldAlert,
   Home,
   ClipboardCheck,
+  LayoutGrid,
   GripVertical
 } from 'lucide-react';
 import {
@@ -64,9 +65,9 @@ const initialMenuData = [
       { 
         title: '案事件信息',
         children: [
-          { title: '违法违规信息' },
-          { title: '企业处罚信息' },
-          { title: '从业人员处罚信息' }
+          { title: '场所内发生案事件情况' },
+          { title: '场所被查处情况' },
+          { title: '从业人员被处罚信息' }
         ]
       }
     ]
@@ -77,6 +78,16 @@ const initialMenuData = [
     icon: <Car size={20} />,
     children: [
       { title: '车辆信息管理' }
+    ]
+  },
+  {
+    id: '经营情况',
+    title: '经营情况',
+    icon: <ClipboardCheck size={20} />,
+    children: [
+      { title: '场所营业日志' },
+      { title: '企业安全巡检' },
+      { title: '从业人员考勤管理' }
     ]
   },
   {
@@ -120,6 +131,29 @@ const initialMenuData = [
           { title: '版本历史' }
         ]
       }
+    ]
+  },
+  {
+    id: '其余适配功能',
+    title: '其余适配功能',
+    icon: <LayoutGrid size={20} />,
+    children: [
+      { title: '场所举报奖励' },
+      { title: '违法违规管理' },
+      { title: '报警信息管理' },
+      { title: '可疑人员管理' },
+      { title: '抓获在逃人员补登' },
+      { title: '报警信息推送' },
+      { title: '预警信息查看' },
+      { title: '高频人群跟踪分析' },
+      { title: '重点人员管控' },
+      { title: '问题反馈' },
+      { title: '自定义布控' },
+      { title: '从业人员处罚管理' },
+      { title: '企业平均上传数量统计' },
+      { title: '企业上传率统计' },
+      { title: '报警信息统计' },
+      { title: '大屏展示' }
     ]
   },
   {

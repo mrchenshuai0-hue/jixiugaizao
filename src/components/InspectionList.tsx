@@ -5,13 +5,38 @@ import { Inspection } from '../types';
 
 interface InspectionListProps {
   onView: (id: string) => void;
+  initialRegion?: string;
 }
 
-export default function InspectionList({ onView }: InspectionListProps) {
+export default function InspectionList({ onView, initialRegion }: InspectionListProps) {
   const [data, setData] = useState<Inspection[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [appliedRegion, setAppliedRegion] = useState(initialRegion || '');
+
+  useEffect(() => {
+    if (initialRegion !== undefined) {
+      setAppliedRegion(initialRegion);
+      if (initialRegion.includes('福州')) {
+        setSelectedRegion('fz');
+      } else if (initialRegion.includes('厦门')) {
+        setSelectedRegion('xm');
+      } else {
+        setSelectedRegion('');
+      }
+    }
+  }, [initialRegion]);
+
+  const displayData = data.filter(row => {
+    if (appliedRegion) {
+      const cleanRegion = appliedRegion.replace('福州市', '').replace('市', '').replace('区', '').replace('县', '').replace('公安分局', '').replace('-', '').trim();
+      return (row.region || '').includes(cleanRegion) || (row.company || '').includes(cleanRegion);
+    }
+    return true;
+  });
 
   const handleSync = () => {
     setSyncing(true);
@@ -49,53 +74,17 @@ export default function InspectionList({ onView }: InspectionListProps) {
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
-        {/* 统计卡片区 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
-              <ClipboardList size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">检查总次数</div>
-              <div className="text-xl font-bold text-gray-800">2,845</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
-              <CheckCircle2 size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">合格率</div>
-              <div className="text-xl font-bold text-gray-800">92.4%</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-yellow-50 rounded-full text-yellow-500 mr-4">
-               <AlertCircle size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">存在问题数</div>
-              <div className="text-xl font-bold text-gray-800">216</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-indigo-50 rounded-full text-indigo-500 mr-4">
-              <FileEdit size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">专项检查次数</div>
-              <div className="text-xl font-bold text-gray-800">45</div>
-            </div>
-          </div>
-        </div>
-
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区域 */}
           <div className="p-5 border-b border-gray-100">
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-end">
               <div>
                 <label className="block text-xs text-[#666666] mb-1.5">行政区划</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+                <select 
+                  value={selectedRegion}
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors"
+                >
                   <option value="">全部</option>
                   <option value="fz">福州市</option>
                   <option value="xm">厦门市</option>
@@ -153,10 +142,16 @@ export default function InspectionList({ onView }: InspectionListProps) {
                 </select>
               </div>
               <div className="flex space-x-2 justify-end">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
+                <button 
+                  onClick={() => setAppliedRegion(selectedRegion === 'fz' ? '福州市' : selectedRegion === 'xm' ? '厦门市' : '')}
+                  className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium"
+                >
                   <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-xs font-medium">
+                <button 
+                  onClick={() => { setSelectedRegion(''); setAppliedRegion(''); }}
+                  className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-xs font-medium"
+                >
                   <RotateCcw size={14} className="mr-1.5" /> 重置
                 </button>
               </div>
@@ -165,20 +160,13 @@ export default function InspectionList({ onView }: InspectionListProps) {
 
           {/* 操作区域 */}
           <div className="px-5 py-3 flex justify-between items-center bg-gray-50/50 border-b border-gray-100">
-            <div className="text-sm text-[#666666]">共找到 <span className="text-[#419EFF] font-medium">{data.length}</span> 条检查记录</div>
+            <div className="text-sm text-[#666666]">共找到 <span className="text-[#419EFF] font-medium">{displayData.length}</span> 条检查记录</div>
             <div className="flex space-x-2">
               <button 
                 onClick={() => window.open('https://www.example.gov.cn/inspection', '_blank')}
                 className="h-8 px-4 bg-white border border-blue-200 text-[#419EFF] rounded hover:bg-blue-50 transition-colors flex items-center text-sm font-medium"
               >
                 省涉企检查系统
-              </button>
-              <button 
-                onClick={handleSync}
-                disabled={syncing}
-                className="h-8 px-4 bg-white border border-[#419EFF] text-[#419EFF] rounded hover:bg-blue-50 transition-colors flex items-center text-sm font-medium disabled:opacity-50"
-              >
-                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? '同步中...' : '同步数据'}
               </button>
               <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
                 <Download size={14} className="mr-1.5" /> 导出
@@ -209,13 +197,13 @@ export default function InspectionList({ onView }: InspectionListProps) {
                       加载中...
                     </td>
                   </tr>
-                ) : data.length === 0 ? (
+                ) : displayData.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="px-4 py-10 text-center text-gray-500">
                       暂无数据
                     </td>
                   </tr>
-                ) : data.map((row) => (
+                ) : displayData.map((row) => (
                   <tr key={row.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
                     <td className="px-4 py-3 font-medium text-[#333333]">{row.id}</td>
                     <td className="px-4 py-3 font-medium text-[#333333]">{row.company}</td>

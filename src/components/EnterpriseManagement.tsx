@@ -7,9 +7,10 @@ type ViewState = 'list' | 'detail' | 'form';
 
 interface EnterpriseManagementProps {
   onNavigate?: (menu: string) => void;
+  initialRegion?: string;
 }
 
-export default function EnterpriseManagement({ onNavigate }: EnterpriseManagementProps = {}) {
+export default function EnterpriseManagement({ onNavigate, initialRegion }: EnterpriseManagementProps = {}) {
   const [view, setView] = useState<ViewState>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -43,6 +44,7 @@ export default function EnterpriseManagement({ onNavigate }: EnterpriseManagemen
       <div className="flex-1 overflow-hidden">
         {view === 'list' && (
           <EnterpriseList 
+            initialRegion={initialRegion}
             onViewDetail={handleViewDetail} 
             onAdd={handleAdd} 
             onEdit={handleEdit} 

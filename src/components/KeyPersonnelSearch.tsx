@@ -173,108 +173,81 @@ export default function KeyPersonnelSearch() {
     );
   }
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // ... (inside component)
+
   return (
     <div className="flex flex-col h-full bg-[#F5F5F5]">
       <div className="flex-1 p-3 overflow-auto">
-        {/* 统计卡片区 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-blue-50 rounded-full text-[#419EFF] mr-4">
-              <Search size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">比对总次数</div>
-              <div className="text-xl font-bold text-gray-800">12,452</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-red-50 rounded-full text-red-500 mr-4">
-              <ShieldAlert size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">重点人员检出</div>
-              <div className="text-xl font-bold text-gray-800">42</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-orange-50 rounded-full text-orange-500 mr-4">
-               <User size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">本月预警数</div>
-              <div className="text-xl font-bold text-gray-800">8</div>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-            <div className="p-3 bg-green-50 rounded-full text-green-500 mr-4">
-              <Download size={24} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-1">核查率</div>
-              <div className="text-xl font-bold text-gray-800">98.5%</div>
-            </div>
-          </div>
-        </div>
-
         <div className="bg-white rounded-lg shadow-[0_0_10px_0_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col min-h-full">
           {/* 查询区 */}
-          <div className="p-5 border-b border-gray-100">
-            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">行政区划</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+          <div className="p-5 border-b border-gray-100 flex items-start justify-between">
+            <div className="flex-1 grid grid-cols-3 gap-6 mr-6">
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">行政区划</label>
+                <select className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
                   <option value="">全部</option>
                   <option value="mw">马尾分局</option>
                   <option value="cs">仓山分局</option>
                   <option value="gl">鼓楼分局</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">身份证号</label>
-                <input type="text" placeholder="请输入身份证号" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">身份证号</label>
+                <input type="text" placeholder="请输入身份证号" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
               </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">姓名</label>
-                <input type="text" placeholder="请输入姓名" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">姓名</label>
+                <input type="text" placeholder="请输入姓名" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
               </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">比对时间</label>
-                <input type="date" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">企业编码</label>
-                <input type="text" placeholder="请输入企业编码" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">关联企业名称</label>
-                <input type="text" placeholder="请输入企业名称" className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">重点人员类别</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
-                  <option value="">全部</option>
-                  <option value="1">涉恐人员</option>
-                  <option value="2">涉稳人员</option>
-                  <option value="3">重大刑事犯罪前科人员</option>
-                  <option value="4">前科人员</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-[#666666] mb-1">人员业务类型</label>
-                <select className="w-full h-8 px-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
-                  <option value="">全部</option>
-                  <option value="1">机修人员</option>
-                  <option value="2">接待人员</option>
-                </select>
-              </div>
-              <div className="flex space-x-2 pt-2 md:col-span-1 lg:col-span-2 justify-end">
-                <button className="h-8 px-4 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-xs font-medium">
-                  <Search size={14} className="mr-1.5" />
-                  查询
+              
+              {isExpanded && (
+                <>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">比对时间</label>
+                    <input type="date" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">企业编码</label>
+                    <input type="text" placeholder="请输入企业编码" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">关联企业名称</label>
+                    <input type="text" placeholder="请输入企业名称" className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF]" />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">重点人员类别</label>
+                    <select className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+                      <option value="">全部</option>
+                      <option value="1">涉恐人员</option>
+                      <option value="2">涉稳人员</option>
+                      <option value="3">重大刑事犯罪前科人员</option>
+                      <option value="4">前科人员</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center">
+                    <label className="text-sm font-medium text-gray-700 w-24 shrink-0 whitespace-nowrap">人员业务类型</label>
+                    <select className="flex-1 h-9 px-3 text-sm border border-gray-300 rounded focus:outline-none focus:border-[#419EFF] bg-white transition-colors">
+                      <option value="">全部</option>
+                      <option value="1">机修人员</option>
+                      <option value="2">接待人员</option>
+                    </select>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-col items-end gap-2 shrink-0">
+              <div className="flex space-x-2">
+                <button className="h-9 px-5 bg-[#419EFF] text-white rounded hover:bg-blue-600 transition-colors flex items-center text-sm font-medium shadow-sm">
+                  <Search size={14} className="mr-1.5" /> 查询
                 </button>
-                <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 hover:text-[#333333] transition-colors flex items-center text-xs font-medium">
-                  <RotateCcw size={14} className="mr-1.5" />
-                  重置
+                <button className="h-9 px-5 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium shadow-sm">
+                  <RotateCcw size={14} className="mr-1.5" /> 重置
+                </button>
+                <button onClick={() => setIsExpanded(!isExpanded)} className="h-9 px-5 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors text-sm font-medium flex items-center">
+                  {isExpanded ? '收起' : '展开'}
                 </button>
               </div>
             </div>
@@ -286,14 +259,6 @@ export default function KeyPersonnelSearch() {
               共找到 <span className="text-red-500 font-medium">{data.length}</span> 条重点关注人员
             </div>
             <div className="flex space-x-2">
-              <button 
-                onClick={handleSync}
-                disabled={syncing}
-                className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium disabled:opacity-50"
-              >
-                <RefreshCw size={14} className={`mr-1.5 ${syncing ? 'animate-spin' : ''}`} />
-                {syncing ? '同步中...' : '同步数据'}
-              </button>
               <button className="h-8 px-4 bg-white border border-gray-300 text-[#666666] rounded hover:bg-gray-50 transition-colors flex items-center text-sm font-medium">
                 <Download size={14} className="mr-1.5" />
                 导出列表

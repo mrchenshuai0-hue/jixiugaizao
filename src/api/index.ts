@@ -4,6 +4,7 @@ import { vehicleService } from '../services/vehicleService';
 import { inspectionService } from '../services/inspectionService';
 import { repairRecordService } from '../services/repairRecordService';
 import { caseService } from '../services/caseService';
+import { violationManagementService } from '../services/violationManagementService';
 import { personnelPunishmentService } from '../services/personnelPunishmentService';
 import { personnelBlacklistService } from '../services/personnelBlacklistService';
 
@@ -23,6 +24,7 @@ export const api = {
   inspection: inspectionService,
   repairRecord: repairRecordService,
   case: caseService,
+  violationManagement: violationManagementService,
   personnelPunishment: personnelPunishmentService,
   personnelBlacklist: personnelBlacklistService,
 };
